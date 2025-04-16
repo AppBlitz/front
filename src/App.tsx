@@ -1,7 +1,9 @@
-function App() {
-  return (<>
+import { Header } from "./components"
 
-    Fron of software III
-  </>)
+function App() {
+  return (
+    <div className="bg-black">
+      <Header />
+    </div>)
 }
 export default App
