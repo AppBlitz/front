@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router"
 import React from "react"
-import { BackPrincipal, Options, User } from "../button";
+import { Options, User } from "../button";
 
 function Header() {
   const history = useNavigate();
@@ -27,15 +27,10 @@ function Header() {
           <h2 onClick={() => history("/")} className="text-lg font-serif text-white hover:text-blue-400 mr-4 cursor-pointer" >Ilios</h2>
         </div>
         {
-          state === 0 ?
-            <Options />
-            : null
+          state === 0 && <Options />
         }
         {
-          state === 0 ?
-            <User />
-            :
-            <BackPrincipal />
+          state === 0 && <User />
         }
       </nav >
     </div>
