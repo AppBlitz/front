@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import { Recipe, Login, Product, Register } from "../pages";
+import { Recipe, Login, Product, Register, RegisterSupplier, UpdateSupplier } from "../pages";
 
 export const router = createBrowserRouter([
   {
@@ -17,6 +17,13 @@ export const router = createBrowserRouter([
   },
   {
     path: "register", Component: Register
+  },
+  {
+    path: "register/supplier", Component: RegisterSupplier
+  },
+  {
+    path: "update/supplier", Component: UpdateSupplier
   }
+
 
 ]);

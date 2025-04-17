@@ -1,5 +1,5 @@
-import { Products } from "../../types/Product";
-import { instance } from "../../service/api"
+import { instance } from "../../../service/api"
+import { Products } from "../../../types/Product"
 
 function saveProduct(product: Products) {
   instance.post("product/add", {

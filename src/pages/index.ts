@@ -1,5 +1,5 @@
 export { Recipe } from "./recipe/"
 export { Login } from "./login/"
-export { Product } from "./product/"
+export { Product, UpdateProducts } from "./product/"
 export { Register } from "./register/"
-export { Supplier } from "./supplier/"
+export { RegisterSupplier, UpdateSupplier } from "./supplier/"
