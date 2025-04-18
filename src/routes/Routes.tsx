@@ -1,13 +1,10 @@
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import { Recipe, Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, EmployeeTable, SupplierTable } from "../pages";
+import { Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable, RecipeTable } from "../pages";
 
 export const router = createBrowserRouter([
   {
     path: "/", Component: App,
-  },
-  {
-    path: "recipe", Component: Recipe
   },
   {
     path: "login", Component: Login
@@ -25,11 +22,12 @@ export const router = createBrowserRouter([
     path: "update/supplier", Component: UpdateSupplier
   },
   {
-    path: "employees", Component: EmployeeTable
+    path: "supplier", Component: SupplierTable
   },
   {
-    path: "supplier", Component: SupplierTable
+    path: "recipe/all", Component: RecipeTable
   }
+
 
 
 
