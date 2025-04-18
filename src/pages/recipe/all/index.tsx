@@ -29,7 +29,7 @@ function RecipeTable() {
     };
 
     fetchRecipes();
-  }, []);
+  });
 
   const handleSelectRecipe = (recipe: createRecipe) => {
     setSelectedRecipe(recipe);
@@ -46,7 +46,7 @@ function RecipeTable() {
       const recipeStatus =
         updatedRecipe.recipeStatus === Estate.ACTIVE ? "ACTIVE" : "INACTIVE";
 
-      await instance.put("api/recipes/update/" + updatedRecipe.id, {
+      await instance.put(`api/recipes/update/${updatedRecipe.id}`, {
         id: updatedRecipe.id,
         name: updatedRecipe.name,
         ingredientes: updatedRecipe.ingredients,
