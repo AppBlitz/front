@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import { Recipe, Login, Product, Register, RegisterSupplier, UpdateSupplier } from "../pages";
+import { Recipe, Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, EmployeeTable, SupplierTable } from "../pages";
 
 export const router = createBrowserRouter([
   {
@@ -13,7 +13,7 @@ export const router = createBrowserRouter([
     path: "login", Component: Login
   },
   {
-    path: "product", Component: Product
+    path: "product", Component: ProductCards
   },
   {
     path: "register", Component: Register
@@ -23,7 +23,14 @@ export const router = createBrowserRouter([
   },
   {
     path: "update/supplier", Component: UpdateSupplier
+  },
+  {
+    path: "employees", Component: EmployeeTable
+  },
+  {
+    path: "supplier", Component: SupplierTable
   }
+
 
 
 ]);

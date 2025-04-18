@@ -1,14 +1,18 @@
-type Products = {
-  nameProduct: string
-  dateExpiration: Date
-  dateAdd: Date
-  weightProduct: number
-  priceProduct: number
-  amount: number
-  image: string
-  supplier?: string
-}
 
+type Product = {
+  id: string;
+  nameProduct: string;
+  suppliers: string[];
+  dateExpiration: string[];
+  controldateExpiration: number[];
+  dateRegister: string;
+  weightProduct: number;
+  priceProduct: number;
+  stock: number;
+  images: string[]; // Base64 or URL strings
+  estate: string;
+  typeStock: string;
+}
 type updateProducts = {
   id: string
   nameProduct: string
@@ -20,4 +24,4 @@ type updateProducts = {
   images?: File[] | null
   suppliers: string[]
 }
-export type { Products, updateProducts }
+export type { Product, updateProducts }

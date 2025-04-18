@@ -2,7 +2,6 @@ import { Header } from "../../components"
 import { useForm } from "react-hook-form"
 import { registerUser } from "../../types/user"
 import { instance } from "../../service/api"
-import { BackPrincipal } from "../../components/button"
 
 function Register() {
   const { register, handleSubmit } = useForm<registerUser>()
@@ -18,27 +17,40 @@ function Register() {
   }
   return (<>
     <Header />
-    <div>
-      <form onSubmit={handleSubmit(registerUser)}>
-        <section>
-          <label>Nombre completo</label>
-          <input {...register("nameComple", { required: true })} />
-        </section>
-        <section>
-          <label>Correo eléctronico</label>
-          <input {...register("emailUser", { required: true })} />
-        </section>
-        <section>
-          <label>Contraseña</label>
-          <input {...register("passwordUser", { required: true })} />
-        </section>
-        <section>
-          <button type="submit">Registrarse</button>
-        </section>
-      </form>
-      <section>
-        <BackPrincipal />
-      </section>
+    <div className="bg-gray-200 text-black font-serif">
+      <div className="flex justify-self-center items-center h-screen">
+        <div className="bg-white rounded-xl w-96 h-112" >
+          <form onSubmit={handleSubmit(registerUser)}>
+            <section>
+              <h1 className="pl-5 py-2 text-black text-lg">Registro</h1>
+            </section>
+            <section className="pl-10 py-1">
+              <p >Bienvenido al restaurante Ilios</p>
+            </section>
+            <section className="pt-8">
+              <label className="flex justify-self-center">Nombre completo</label>
+              <section className="flex justify-self-center">
+                <input type="text" className="w-72 h-10 border border-color-black rounded-full text-black text-left pl-3"{...register("nameComple", { required: true })} />
+              </section>
+            </section>
+            <section className="pt-8">
+              <label className="flex justify-self-center">Correo eléctronico</label>
+              <section className="felx justify-self-center">
+                <input type="text" className="w-72 h-10 border border-color-black rounded-full text-black text-left pl-3"{...register("emailUser", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ })} />
+              </section>
+            </section>
+            <section className="pt-8">
+              <label className="flex justify-self-center">Contraseña</label>
+              <section className="flex justify-self-center">
+                <input type="password" className="w-72 border border-color-black rounded-full h-10 text-left pl-3"{...register("passwordUser", { required: true })} />
+              </section>
+            </section>
+            <section className="flex justify-center pt-10">
+              <button className="hover:cursor-pointer" type="submit">Registrarse</button>
+            </section>
+          </form>
+        </div>
+      </div>
     </div>
   </>)
 }
