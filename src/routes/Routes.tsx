@@ -1,6 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import App from "../App";
-import { Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable, RecipeTable } from "../pages";
+import { Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable, RecipeTable, CreateRecipes } from "../pages";
 
 export const router = createBrowserRouter([
   {
@@ -26,7 +26,11 @@ export const router = createBrowserRouter([
   },
   {
     path: "recipe/all", Component: RecipeTable
+  },
+  {
+    path: "create/recipe", Component: CreateRecipes
   }
+
 
 
 

@@ -1,4 +1,4 @@
-export { RecipeTable } from "./recipe/"
+export { RecipeTable, CreateRecipes } from "./recipe/"
 export { Login } from "./login/"
 export { Product, UpdateProducts, ProductCards } from "./product/"
 export { Register } from "./register/"
