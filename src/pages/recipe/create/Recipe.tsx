@@ -2,45 +2,45 @@
 import { useState, useEffect } from "react";
 import { instance } from "../../../service/api";
 import { Header } from "../../../components";
-import { useForm } from "react-hook-form";
+import { useForm, useFieldArray } from "react-hook-form";
 import { saveRecipe } from "./options.ts";
 import { Product } from "../../../types/Product.ts";
-
-enum Estate {
-  ACTIVE = "Activo",
-  INACTIVE = "Inactivo",
-}
-
-interface createRecipe {
-  name: string;
-  ingredients: number[];
-  instructions: string;
-  preparationTime: number;
-  servings: number;
-  comment?: string;
-  creationDate: string;
-  recipeStatus: Estate;
-}
+import { createRecipe, Ingredient } from "../../../types/recipe.ts";
 
 function CreateRecipes() {
-  const { register, handleSubmit, formState: { errors } } = useForm<createRecipe>();
-  const [ingredients, setIngredients] = useState<Product[]>([]);
+  const {
+    register,
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<createRecipe>();
 
-  // Cargar los ingredientes al cargar el componente
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "ingredients",
+  });
+
+  const [products, setProducts] = useState<Product[]>([]);
+
+  // Cargar los productos al cargar el componente
   useEffect(() => {
     instance
       .get("product/allProducts")
       .then((response) => {
         if (response.data && Array.isArray(response.data)) {
-          setIngredients(response.data);
+          setProducts(response.data);
         } else {
-          console.error("La respuesta no contiene una lista válida de ingredientes.");
+          console.error("La respuesta no contiene una lista válida de productos.");
         }
       })
       .catch((error) => {
-        console.error("Error al cargar los ingredientes:", error);
+        console.error("Error al cargar los productos:", error);
       });
   }, []);
+
+  const addIngredient = () => {
+    append({ productId: "", quantity: 0, unitOfMeasure: "", additionalNotes: "" });
+  };
 
   return (
     <>
@@ -62,18 +62,79 @@ function CreateRecipes() {
             {/* Ingredientes */}
             <section className="mb-4">
               <label className="block text-black font-medium mb-2">Ingredientes</label>
-              <select
-                className="w-full p-2 border border-black rounded"
-                {...register("ingredients", { required: "Seleccione al menos un ingrediente." })}
-                multiple
+              {fields.map((item, index) => (
+                <div key={item.id} className="mb-4 border p-4 rounded">
+                  <label className="block text-black font-medium">Ingrediente</label>
+                  <select
+                    className="w-full p-2 border border-black rounded mb-2"
+                    {...register(`ingredients.${index}.productId`, {
+                      required: "Seleccione un ingrediente.",
+                    })}
+                  >
+                    <option value="">Seleccione un ingrediente</option>
+                    {products.map((product) => (
+                      <option key={product.id} value={product.id}>
+                        {product.nameProduct}
+                      </option>
+                    ))}
+                  </select>
+                  {errors.ingredients?.[index]?.productId && (
+                    <span className="text-red-500 text-sm">
+                      {errors.ingredients[index].productId?.message}
+                    </span>
+                  )}
+
+                  <label className="block text-black font-medium">Cantidad</label>
+                  <input
+                    type="number"
+                    className="w-full p-2 border border-black rounded mb-2"
+                    {...register(`ingredients.${index}.quantity`, {
+                      required: "Ingrese una cantidad.",
+                      valueAsNumber: true,
+                      min: { value: 1, message: "La cantidad debe ser mayor a 0." },
+                    })}
+                  />
+                  {errors.ingredients?.[index]?.quantity && (
+                    <span className="text-red-500 text-sm">
+                      {errors.ingredients[index].quantity?.message}
+                    </span>
+                  )}
+
+                  <label className="block text-black font-medium">Unidad de Medida</label>
+                  <input
+                    className="w-full p-2 border border-black rounded mb-2"
+                    {...register(`ingredients.${index}.unitOfMeasure`, {
+                      required: "Ingrese una unidad de medida.",
+                    })}
+                  />
+                  {errors.ingredients?.[index]?.unitOfMeasure && (
+                    <span className="text-red-500 text-sm">
+                      {errors.ingredients[index].unitOfMeasure?.message}
+                    </span>
+                  )}
+
+                  <label className="block text-black font-medium">Notas Adicionales</label>
+                  <textarea
+                    className="w-full p-2 border border-black rounded mb-2"
+                    {...register(`ingredients.${index}.additionalNotes`)}
+                  ></textarea>
+
+                  <button
+                    type="button"
+                    className="text-red-500 font-medium mt-2"
+                    onClick={() => remove(index)}
+                  >
+                    Eliminar Ingrediente
+                  </button>
+                </div>
+              ))}
+              <button
+                type="button"
+                className="w-full p-2 bg-blue-500 text-white font-medium rounded hover:bg-blue-700"
+                onClick={addIngredient}
               >
-                {ingredients.map((ingredient) => (
-                  <option key={ingredient.id} value={ingredient.id}>
-                    {ingredient.nameProduct || `Ingrediente`}
-                  </option>
-                ))}
-              </select>
-              {errors.ingredients && <span className="text-red-500 text-sm">{errors.ingredients.message}</span>}
+                Agregar Ingrediente
+              </button>
             </section>
 
             {/* Instrucciones */}
@@ -94,7 +155,9 @@ function CreateRecipes() {
                 className="w-full p-2 border border-black rounded"
                 {...register("preparationTime", { required: "Este campo es obligatorio." })}
               />
-              {errors.preparationTime && <span className="text-red-500 text-sm">{errors.preparationTime.message}</span>}
+              {errors.preparationTime && (
+                <span className="text-red-500 text-sm">{errors.preparationTime.message}</span>
+              )}
             </section>
 
             {/* Porciones */}
@@ -125,7 +188,9 @@ function CreateRecipes() {
                 className="w-full p-2 border border-black rounded"
                 {...register("creationDate", { required: "Este campo es obligatorio." })}
               />
-              {errors.creationDate && <span className="text-red-500 text-sm">{errors.creationDate.message}</span>}
+              {errors.creationDate && (
+                <span className="text-red-500 text-sm">{errors.creationDate.message}</span>
+              )}
             </section>
 
             {/* Estado */}
@@ -135,10 +200,12 @@ function CreateRecipes() {
                 className="w-full p-2 border border-black rounded"
                 {...register("recipeStatus", { required: "Seleccione un estado." })}
               >
-                <option value={Estate.ACTIVE}>Activo</option>
-                <option value={Estate.INACTIVE}>Inactivo</option>
+                <option value="ACTIVE">Activo</option>
+                <option value="INACTIVE">Inactivo</option>
               </select>
-              {errors.recipeStatus && <span className="text-red-500 text-sm">{errors.recipeStatus.message}</span>}
+              {errors.recipeStatus && (
+                <span className="text-red-500 text-sm">{errors.recipeStatus.message}</span>
+              )}
             </section>
 
             {/* Botón Guardar */}

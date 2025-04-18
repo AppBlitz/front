@@ -1,8 +1,8 @@
 import { instance } from "../../../service/api";
-import { createRecipe, Ingredient } from "../../../types/recipe";
+import { createRecipe } from "../../../types/recipe";
 
 function saveRecipe(recipe: createRecipe) {
-  console.log(recipe.ingredients);
+  console.log(recipe);
   let state: string = "INACTIVE";
   if (recipe.recipeStatus.toString() === "1") {
     state = "ACTIVE";
@@ -17,8 +17,5 @@ function saveRecipe(recipe: createRecipe) {
     creationDate: recipe.creationDate,
     recipeStatus: state
   })
-}
-function createArray() {
-  const array: Ingredient[] = [];
 }
 export { saveRecipe }
