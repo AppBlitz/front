@@ -1,11 +1,11 @@
 
 import { Header } from "../../../components";
 import { useForm } from "react-hook-form";
-import { registerSupplier } from "../../../types/supplier";
-import { registerSuppliers } from "./functions.ts";
+import { registerSuppliers } from "../../../types/supplier";
+import { registerSupplierss } from "./options";
 
 function RegisterSupplier() {
-  const { register, handleSubmit } = useForm<registerSupplier>();
+  const { register, handleSubmit } = useForm<registerSuppliers>();
 
   return (
     <>
@@ -13,8 +13,7 @@ function RegisterSupplier() {
       <div className="bg-gray-200 text-black font-serif min-h-screen flex items-center justify-center">
         <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-lg">
           <h1 className="text-2xl font-bold mb-6 text-center">Registro Proveedor</h1>
-          <form onSubmit={handleSubmit(registerSuppliers)} className="space-y-6">
-            {/* Nombre */}
+          <form onSubmit={handleSubmit(registerSupplierss)} className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-1">Nombre</label>
               <input
@@ -24,7 +23,6 @@ function RegisterSupplier() {
               />
             </div>
 
-            {/* Locación */}
             <div>
               <label className="block text-sm font-medium mb-1">Locación</label>
               <input
@@ -34,7 +32,6 @@ function RegisterSupplier() {
               />
             </div>
 
-            {/* Fecha de la orden */}
             <div>
               <label className="block text-sm font-medium mb-1">Fecha de la Orden</label>
               <input
@@ -54,7 +51,6 @@ function RegisterSupplier() {
               />
             </div>
 
-            {/* Estado del proveedor */}
             <div>
               <label className="block text-sm font-medium mb-1">Estado del Proveedor</label>
               <select
@@ -69,7 +65,6 @@ function RegisterSupplier() {
               </select>
             </div>
 
-            {/* Botón de envío */}
             <div className="text-center">
               <button
                 type="submit"
