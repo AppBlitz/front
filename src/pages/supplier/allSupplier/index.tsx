@@ -2,7 +2,7 @@
 import { useState, useEffect } from "react";
 import { Header } from "../../../components";
 import { Supplier } from "../../../types/supplier";
-import axios from "axios";
+import { instance } from "../../../service/api";
 
 const formatDate = (date: string | Date): string => {
   const parsedDate = typeof date === "string" ? new Date(date) : date;
@@ -17,7 +17,7 @@ function SupplierTable() {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await axios.get("http://localhost:8080/supplier/all");
+        const response = await instance.get("supplier/all");
         const data = response.data.map((supplier: Supplier) => ({
           ...supplier,
           orderDate: new Date(supplier.orderDate),
@@ -50,7 +50,7 @@ function SupplierTable() {
       else {
         state = "ASSET"
       }
-      await axios.put("http://localhost:8080/supplier/edit", {
+      await instance.put("supplier/edit", {
         id: updatedSupplier.id,
         nameSupplier: updatedSupplier.nameSupplier,
         location: updatedSupplier.location,
@@ -73,7 +73,7 @@ function SupplierTable() {
 
   const handleDeleteSupplier = async (id: number) => {
     try {
-      await axios.delete("http://localhost:8080/supplier/delete/" + id);
+      await instance.delete("supplier/delete/" + id);
       setSuppliers((prevSuppliers) =>
         prevSuppliers.filter((supplier) => supplier.id !== id)
       );

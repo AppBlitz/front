@@ -1,24 +1,19 @@
 
+import { instance } from "../../../service/api";
 import { registerSuppliers } from "../../../types/supplier";
-import axios from "axios"
 
 function registerSupplierss(supplier: registerSuppliers) {
   let state: string = "IDLE";
   if (supplier.stateActivity === "Activo") {
     state = "ASSET";
   }
-  axios(
-    {
-      method: "post",
-      url: "http://localhost:8080/supplier/add",
-      data: {
-        nameSupplier: supplier.nameSupplier,
-        location: supplier.location,
-        orderDate: supplier.orderDate,
-        offeredProducts: splitString(supplier.offeredProducts + "", ","),
-        stateActivity: state
-      }
-    })
+  instance.post("supplier/add", {
+    nameSupplier: supplier.nameSupplier,
+    location: supplier.location,
+    orderDate: supplier.orderDate,
+    offeredProducts: splitString(supplier.offeredProducts + "", ","),
+    stateActivity: state
+  })
 
 }
 export { registerSupplierss }
