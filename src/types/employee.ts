@@ -7,8 +7,7 @@ type EmployeeCreate = {
   retirementDate: string
   isRetired: boolean
   baseSalary: number
-  email: string
-  password: string
+  user: user
   cesantias: Cesantias
   pension: Pension
   riskLevel: RiskLevel
@@ -16,6 +15,15 @@ type EmployeeCreate = {
   arl: ARL
   area: AREA
   eps: EPS
+  rol: rol
+}
+type rol = {
+  rollEmployee: RollEmployee
+  permissions: Permisions[]
+}
+type user = {
+  email: string,
+  password: string
 }
 enum Cesantias {
   PROVENIR = "PROVENIR",
@@ -59,5 +67,37 @@ enum EPS {
   SURA = "SURA",
   SANITAS = "SANITAS",
 }
-export type { EmployeeCreate, Cesantias, Pension, RiskLevel, ARL, AREA, EPS }
 
+enum PayrollConcept {
+  BONUS_AND_COMMISSIONS = "BONUS_AND_COMMISSIONS",
+  DAYTIME_OVERTIME_HOURS = "DAYTIME_OVERTIME_HOURS",
+  NIGHTTIME_OVERTIME_HOURS = "NIGHTTIME_OVERTIME_HOURS",
+  SUNDAY_OVERTIME_HOURS = "SUNDAY_OVERTIME_HOURS",
+  SUNDAY_NIGHTTIME_OVERTIME_HOURS = "SUNDAY_NIGHTTIME_OVERTIME_HOURS",
+  DEDUCTION = "DEDUCTION",
+  LEAVE_WITHOUT_PAY = "LEAVE_WITHOUT_PAY",
+  VACATION_PAY = "VACATION_PAY",
+  INCAPACITY = "INCAPACITY",
+  TRANSPORTATION_ALLOWANCE = "TRANSPORTATION_ALLOWANCE",
+  PRIMA = "PRIMA",
+  CESANTIAS = "CESANTIAS",
+  ARL = "ARL",
+  EPS = "EPS",
+  PENSION = "PENSION",
+  CCF = "CCF",
+}
+
+enum Permisions {
+  CREAR = "CREAR",
+  ELIMINAR = "ELIMINAR",
+  CONSULTAR = "CONSULTAR",
+  EDITAR = "EDITAR"
+}
+
+enum RollEmployee {
+  KITCHENEMPLOYEE = "KITCHENEMPLOYEE",
+  CASHIEREMPLOYE = "CASHIEREMPLOYE",
+  WAREHOUSEEMPLOYEE = "WAREHOUSEEMPLOYEE"
+}
+export type { EmployeeCreate, user }
+export { Cesantias, Pension, RiskLevel, ARL, AREA, EPS, PayrollConcept, Permisions, RollEmployee }

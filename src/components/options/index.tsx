@@ -4,29 +4,30 @@ import { useState } from "react";
 interface DropdownMenuProps<T> {
   opciones: T[];
   onSelect: (opcion: T) => void;
+  name: string;
 }
 
-const DropdownMenu = <T extends string>({ opciones, onSelect }: DropdownMenuProps<T>) => {
+const DropdownMenu = <T extends string>({ opciones, onSelect, name }: DropdownMenuProps<T>) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState<T | null>(null);
 
   const toggleMenu = () => setIsOpen(!isOpen);
 
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left w-full">
       <button
         onClick={toggleMenu}
-        className="bg-blue-500 text-white px-4 py-2 rounded-md focus:outline-none"
+        className="w-full bg-black text-white px-4 py-2 rounded-md focus:outline-none border border-gray-300"
       >
-        {selectedOption ? selectedOption : "Opciones"}
+        {selectedOption ? selectedOption : name}
       </button>
 
       {isOpen && (
-        <ul className="absolute left-0 mt-2 w-48 bg-white border border-gray-300 rounded-md shadow-lg">
+        <ul className="absolute left-0 mt-2 w-full bg-white border border-gray-300 rounded-md shadow-lg z-10 max-h-40 overflow-auto">
           {opciones.map((opcion, index) => (
             <li
               key={index}
-              className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+              className="px-4 py-2 text-black hover:bg-gray-100 cursor-pointer"
               onClick={() => {
                 setSelectedOption(opcion);
                 onSelect(opcion);
@@ -42,4 +43,4 @@ const DropdownMenu = <T extends string>({ opciones, onSelect }: DropdownMenuProp
   );
 };
 
-export { DropdownMenu }
+export { DropdownMenu };
