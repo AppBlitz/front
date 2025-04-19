@@ -89,8 +89,8 @@ function CreateEmployee() {
               { label: "Nivel de Riesgo", field: "level", options: RiskLevel },
               { label: "Pensión", field: "pension", options: Pension },
               { label: "Cesantías", field: "cesantias", options: Cesantias },
-              { label: "Permisos", field: "permision", options: Permisions },
-              { label: "Rol", field: "rol", options: RollEmployee },
+              { label: "Permisos", field: "rol.permissions:", options: Permisions },
+              { label: "Rol", field: "rol.rollEmployee:", options: RollEmployee },
             ].map(({ label, field, options }) => (
               <section key={field} className="mb-4 relative">
                 <DropdownMenu
