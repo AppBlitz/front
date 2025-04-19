@@ -1,4 +1,3 @@
-
 import { Header } from "../../../components";
 import { useState, useEffect } from "react";
 import { Product } from "../../../types/Product";

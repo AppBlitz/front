@@ -5,7 +5,7 @@ import { Header } from "../../../components";
 import { useForm, useFieldArray } from "react-hook-form";
 import { saveRecipe } from "./options.ts";
 import { Product } from "../../../types/Product.ts";
-import { createRecipe, Ingredient } from "../../../types/recipe.ts";
+import { createRecipe } from "../../../types/recipe.ts";
 
 function CreateRecipes() {
   const {

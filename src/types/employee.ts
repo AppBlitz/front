@@ -7,7 +7,8 @@ type EmployeeCreate = {
   retirementDate: string
   isRetired: boolean
   baseSalary: number
-  user: user
+  email: string
+  password: string
   cesantias: Cesantias
   pension: Pension
   riskLevel: RiskLevel

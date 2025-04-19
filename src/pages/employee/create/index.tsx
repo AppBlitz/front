@@ -1,3 +1,4 @@
+
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
 import { DropdownMenu, Header } from "../../../components";
@@ -49,12 +50,12 @@ function CreateEmployee() {
             {[
               { label: "Nombre", name: "nameEmployee", type: "text" },
               { label: "Salario base", name: "baseSalary", type: "number" },
-              { label: "Correo electrónico", name: "user.email", type: "email" },
+              { label: "Correo electrónico", name: "email", type: "email" },
               { label: "Dirección", name: "address", type: "text" },
               { label: "Ciudad", name: "city", type: "text" },
               { label: "Número de teléfono", name: "phoneNumber", type: "text" },
               { label: "Fecha de entrada", name: "entryDate", type: "date" },
-              { label: "Contraseña", name: "user.password", type: "password" },
+              { label: "Contraseña", name: "password", type: "password" },
             ].map(({ label, name, type }) => (
               <section key={name} className="mb-4">
                 <label className="block text-black font-medium mb-2">
