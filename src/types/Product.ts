@@ -1,5 +1,5 @@
 
-type Product = {
+type Products = {
   id: string;
   nameProduct: string;
   suppliers: string[];
@@ -24,4 +24,4 @@ type updateProducts = {
   images?: File[] | null
   suppliers: string[]
 }
-export type { Product, updateProducts }
+export type { Products, updateProducts }

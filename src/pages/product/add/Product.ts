@@ -6,13 +6,13 @@ function saveProduct(product: Products) {
     data:
     {
       nameProduct: product.nameProduct,
-      supplier: product.supplier,
+      supplier: product.suppliers,
       dateExpiration: product.dateExpiration,
       dateAdd: new Date().toLocaleTimeString(),
       weightProduct: product.weightProduct,
-      amount: product.amount,
+      amount: product.stock,
       priceProduct: product.priceProduct,
-      image: product.image
+      image: product.images
     }
 
   })

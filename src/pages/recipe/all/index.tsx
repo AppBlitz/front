@@ -4,10 +4,6 @@ import { Header } from "../../../components";
 import { instance } from "../../../service/api";
 import { createRecipe, Estate } from "../../../types/recipe";
 
-const formatDate = (date: string | Date): string => {
-  const parsedDate = typeof date === "string" ? new Date(date) : date;
-  return parsedDate.toLocaleDateString("en-CA");
-};
 
 function RecipeTable() {
   const [recipes, setRecipes] = useState<createRecipe[]>([]);
