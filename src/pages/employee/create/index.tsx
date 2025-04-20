@@ -13,6 +13,7 @@ import {
   Permisions,
   RiskLevel,
   RollEmployee,
+  Objeto
 } from "../../../types/employee";
 
 function CreateEmployee() {
@@ -85,12 +86,14 @@ function CreateEmployee() {
             {[
               { label: "EPS", field: "eps", options: EPS },
               { label: "Caja Compensación", field: "cff", options: CCF },
+              { label: "ARL", field: "arl", options: ["SURA", "AXA_COLPATRIA", "OTRA"] },
               { label: "Área", field: "area", options: AREA },
               { label: "Nivel de Riesgo", field: "level", options: RiskLevel },
               { label: "Pensión", field: "pension", options: Pension },
               { label: "Cesantías", field: "cesantias", options: Cesantias },
-              { label: "Permisos", field: "rol.permissions:", options: Permisions },
-              { label: "Rol", field: "rol.rollEmployee:", options: RollEmployee },
+              { label: "Permisos", field: "roll.permissionsEmployee.permissions:", options: Permisions },
+              { label: "Permisos sobre", field: "roll.permissionsEmployee.objeto:", options: Objeto },
+              { label: "Rol", field: "roll.rollEmployee:", options: RollEmployee },
             ].map(({ label, field, options }) => (
               <section key={field} className="mb-4 relative">
                 <DropdownMenu

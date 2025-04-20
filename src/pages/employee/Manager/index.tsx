@@ -2,19 +2,19 @@ import { Header } from "../../../components";
 import { useState, useEffect } from "react";
 import { Products } from "../../../types/Product";
 import axios from "axios";
-import { MovementForm } from "../movement/index";
+import { MovementForm } from "../../../pages/product/movement/index"
 //import { Movements } from "../../../types/movementProduct";
 import { Movementsconsult } from "../../../types/movementProduct";
 
-function ProductCards() {
+function history() {
   const [products, setProducts] = useState<Products[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
 
   const [showModal, setShowModal] = useState(false);
   const [productToMove, setProductToMove] = useState<Products | null>(null);
 
-  // const [showQueryModal, setShowQueryModal] = useState(false);
-  // const [queryResults, setQueryResults] = useState<Movementsconsult[] | null>(null);
+  const [showQueryModal, setShowQueryModal] = useState(false);
+  const [queryResults, setQueryResults] = useState<Movementsconsult[] | null>(null);
 
   const handleRegisterMovement = (product: Products) => {
     setProductToMove(product);
@@ -122,7 +122,6 @@ function ProductCards() {
         </div>
         )
       }
-      {/*
           <button className="fixed bottom-6 right-6 bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 transition"
           onClick={() => setShowQueryModal(true)} > Consultar movimientos en el inventario </button>  
 
@@ -201,10 +200,10 @@ function ProductCards() {
       )}
     </div>
   </div>
-)} */}
+)}
 
     </>
   );
 }
 
-export { ProductCards };
+export { history };
