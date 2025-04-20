@@ -4,7 +4,7 @@ import { instance } from "../../../service/api";
 import { Header } from "../../../components";
 import { useForm, useFieldArray } from "react-hook-form";
 import { saveRecipe } from "./options.ts";
-import { Product } from "../../../types/Product.ts";
+import { Products } from "../../../types/Product.ts";
 import { createRecipe } from "../../../types/recipe.ts";
 
 function CreateRecipes() {
@@ -20,7 +20,7 @@ function CreateRecipes() {
     name: "ingredients",
   });
 
-  const [products, setProducts] = useState<Product[]>([]);
+  const [products, setProducts] = useState<Products[]>([]);
 
   // Cargar los productos al cargar el componente
   useEffect(() => {

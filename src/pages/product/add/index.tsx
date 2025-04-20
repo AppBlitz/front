@@ -15,7 +15,7 @@ function Product() {
         </section>
         <section>
           <label> Proveedor</label>
-          <input{...register("supplier", { required: false })} />
+          <input{...register("suppliers", { required: false })} />
         </section>
         <section>
           <label>Fecha de expiración</label>
@@ -27,7 +27,7 @@ function Product() {
         </section>
         <section>
           <label>Cantidad de productos</label>
-          <input{...register("amount", { required: true, min: 1, max: 100 })} />
+          <input{...register("stock", { required: true, min: 1, max: 100 })} />
         </section>
         <section>
           <label>Peso del producto</label>
@@ -35,7 +35,7 @@ function Product() {
         </section>
         <section>
           <label>Imagen del producto</label>
-          <input {...register("image", { required: false })} />
+          <input {...register("images", { required: false })} />
         </section>
         <section>
           <button type="submit">Agregar</button>

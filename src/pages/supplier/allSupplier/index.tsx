@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import { Header } from "../../../components";
 import { Supplier } from "../../../types/supplier";
 import { instance } from "../../../service/api";
+import axios from "axios";
 
 const formatDate = (date: string | Date): string => {
   const parsedDate = typeof date === "string" ? new Date(date) : date;
@@ -17,7 +18,9 @@ function SupplierTable() {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await instance.get("supplier/all");
+        //const response = await instance.get("supplier/all");
+        const response = await axios.get(`http://localhost:8080/supplier/all`)
+
         const data = response.data.map((supplier: Supplier) => ({
           ...supplier,
           orderDate: new Date(supplier.orderDate),
@@ -45,10 +48,10 @@ function SupplierTable() {
     try {
       let state: string = "";
       if (updatedSupplier.stateActivity === "INACTIVO") {
-        state = "IDLE";
+        state = "INACTIVO";
       }
       else {
-        state = "ASSET"
+        state = "ACTIVO"
       }
       await instance.put("supplier/edit", {
         id: updatedSupplier.id,
@@ -71,7 +74,7 @@ function SupplierTable() {
     }
   };
 
-  const handleDeleteSupplier = async (id: number) => {
+  const handleDeleteSupplier = async (id: String) => {
     try {
       await instance.delete("supplier/delete/" + id);
       setSuppliers((prevSuppliers) =>
@@ -83,8 +86,8 @@ function SupplierTable() {
     }
   };
   function verificationState() {
-    console.log(selectedSupplier?.stateActivitys)
-    if (selectedSupplier?.stateActivity === "IDLE") {
+    console.log(selectedSupplier?.stateActivity)
+    if (selectedSupplier?.stateActivity === "INACTIVO") {
       return "Inactivo";
     }
     else {
@@ -221,7 +224,7 @@ function SupplierTable() {
                     onChange={(e) =>
                       setEditingSupplier({
                         ...editingSupplier,
-                        stateActivity: e.target.value,
+                        stateActivity: e.target.value as "ACTIVO" | "INACTIVO",
                       })
                     }
                     className="border rounded px-4 py-2 w-full"

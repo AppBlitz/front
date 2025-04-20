@@ -1,4 +1,5 @@
-import { instance } from "../../../service/api";
+import axios from "axios";
+//import { instance } from "../../../service/api";
 import { EmployeeCreate } from "../../../types/employee";
 
 async function saveEmployee(employee: EmployeeCreate) {
@@ -9,8 +10,9 @@ async function saveEmployee(employee: EmployeeCreate) {
     if (isNaN(salary)) {
       throw new Error("El salario base no es un número válido.");
     }
+    console.log(employee)
 
-    await instance.post("employees/add", {
+    await axios.post("http://localhost:8080/employees/add", {
       nameEmployee: employee.nameEmployee,
       address: employee.address,
       city: employee.city,
@@ -19,7 +21,7 @@ async function saveEmployee(employee: EmployeeCreate) {
       retirementDate: "",
       isRetired: employee.isRetired,
       baseSalary: salary,
-      roll: employee.rol,
+      roll: employee.roll,
       email: employee.email,
       password: employee.password,
       eps: employee.eps,

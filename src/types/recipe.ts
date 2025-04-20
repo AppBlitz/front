@@ -7,7 +7,7 @@ export type createRecipe = {
   comment: string
   creationDate: Date
   recipeStatus: Estate
-  ingredients: Ingredient
+  ingredients: Ingredient[]
 }
 export type Ingredient = {
   productId: string
@@ -18,4 +18,10 @@ export type Ingredient = {
 export enum Estate {
   ACTIVE,
   INACTIVE
+}
+
+export type Recipesconsult = {
+  Action: String
+  time:string
+  details: String
 }
