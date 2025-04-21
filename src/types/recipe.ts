@@ -7,7 +7,7 @@ export type createRecipe = {
   comment: string
   creationDate: Date
   recipeStatus: Estate
-  ingredients: Ingredient
+  ingredients: Ingredient[]
 }
 export type Ingredient = {
   productId: string

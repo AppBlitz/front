@@ -75,7 +75,7 @@ function SupplierTable() {
     try {
       await instance.delete("supplier/delete/" + id);
       setSuppliers((prevSuppliers) =>
-        prevSuppliers.filter((supplier) => supplier.id !== id)
+        prevSuppliers.filter((supplier) => parseInt(supplier.id) !== id)
       );
       console.log("Proveedor eliminado:", id);
     } catch (error) {
@@ -83,8 +83,8 @@ function SupplierTable() {
     }
   };
   function verificationState() {
-    console.log(selectedSupplier?.stateActivitys)
-    if (selectedSupplier?.stateActivity === "IDLE") {
+    console.log(selectedSupplier?.stateActivity)
+    if (selectedSupplier?.stateActivity + "" === "IDLE") {
       return "Inactivo";
     }
     else {
@@ -137,7 +137,7 @@ function SupplierTable() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteSupplier(supplier.id);
+                          handleDeleteSupplier(parseInt(supplier.id));
                         }}
                         className="bg-red-500 text-white px-3 py-1 rounded-full"
                       >
@@ -221,7 +221,7 @@ function SupplierTable() {
                     onChange={(e) =>
                       setEditingSupplier({
                         ...editingSupplier,
-                        stateActivity: e.target.value,
+                        stateActivity: e.target.value as "ACTIVO" | "INACTIVO"
                       })
                     }
                     className="border rounded px-4 py-2 w-full"

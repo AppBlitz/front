@@ -1,10 +1,13 @@
 import { instance } from "../../../service/api";
-import { EmployeeCreate } from "../../../types/employee";
+import { EmployeeCreate, rol } from "../../../types/employee";
 
 async function saveEmployee(employee: EmployeeCreate) {
   try {
     console.log("Datos del empleado", employee);
-
+    const rols: rol = {
+      rollEmployee: employee.rol.rollEmployee,
+      permissions: employee.rol.permissions
+    }
     const salary: number = Number(employee.baseSalary);
     if (isNaN(salary)) {
       throw new Error("El salario base no es un número válido.");
@@ -19,7 +22,7 @@ async function saveEmployee(employee: EmployeeCreate) {
       retirementDate: "",
       isRetired: employee.isRetired,
       baseSalary: salary,
-      roll: employee.rol,
+      rol: rols,
       email: employee.email,
       password: employee.password,
       eps: employee.eps,

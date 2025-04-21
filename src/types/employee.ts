@@ -100,5 +100,5 @@ enum RollEmployee {
   CASHIEREMPLOYE = "CASHIEREMPLOYE",
   WAREHOUSEEMPLOYEE = "WAREHOUSEEMPLOYEE"
 }
-export type { EmployeeCreate, user }
+export type { EmployeeCreate, user, rol }
 export { Cesantias, Pension, RiskLevel, ARL, AREA, EPS, PayrollConcept, Permisions, RollEmployee }

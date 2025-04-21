@@ -2,11 +2,11 @@
 import { useState, useEffect } from "react";
 import { Header } from "../../../components";
 import { instance } from "../../../service/api";
-import { createRecipe, Estate } from "../../../types/recipe";
+import { createRecipe, Estate, Ingredient } from "../../../types/recipe";
 
 
 function RecipeTable() {
-  const [recipes, setRecipes] = useState<createRecipe[]>([]);
+  const [recipes, setRecipes] = useState<createRecipe[]>([])
   const [selectedRecipe, setSelectedRecipe] = useState<createRecipe | null>(null);
   const [editingRecipe, setEditingRecipe] = useState<createRecipe | null>(null);
 
@@ -147,7 +147,7 @@ function RecipeTable() {
                 <p><strong>Porciones:</strong> {selectedRecipe.servings}</p>
                 <p><strong>Ingredientes:</strong></p>
                 <ul>
-                  {selectedRecipe.ingredients.map((ingredient, index) => (
+                  {selectedRecipe.ingredients.map((ingredient: Ingredient, index: number) => (
                     <li key={index}>
                       {ingredient.quantity} {ingredient.unitOfMeasure} de {ingredient.productId}{" "}
                       {ingredient.additionalNotes && `(${ingredient.additionalNotes})`}
@@ -205,7 +205,7 @@ function RecipeTable() {
                   />
 
                   <label className="block mt-4">Ingredientes:</label>
-                  {editingRecipe.ingredients.map((ingredient, index) => (
+                  {editingRecipe.ingredients.map((ingredient, index: number) => (
                     <div key={index} className="mt-2">
                       <input
                         type="text"

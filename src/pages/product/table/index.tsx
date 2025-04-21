@@ -1,16 +1,16 @@
 import { Header } from "../../../components";
 import { useState, useEffect } from "react";
-import { Product } from "../../../types/Product";
+import { Products } from "../../../types/Product";
 import axios from "axios";
 
 function ProductCards() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Products[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
 
   useEffect(() => {
     axios.get("http://localhost:8080/product/allProducts")
       .then((response) => {
-        const formattedProducts = response.data.map((product: Product) => ({
+        const formattedProducts = response.data.map((product: Products) => ({
           ...product,
           images: product.images || [],
         }));
@@ -22,16 +22,16 @@ function ProductCards() {
       });
   }, []);
 
-  const handleSelectProduct = (product: Product) => {
+  const handleSelectProduct = (product: Products) => {
     setSelectedProduct(selectedProduct?.id === product.id ? null : product);
   };
 
-  const handleEditProduct = (product: Product) => {
+  const handleEditProduct = (product: Products) => {
     console.log("Editar producto:", product);
     setSelectedProduct(product);
   };
 
-  const handleDeleteProduct = (product: Product) => {
+  const handleDeleteProduct = (product: Products) => {
     if (window.confirm(`¿Deseas eliminar el producto "${product.nameProduct}"?`)) {
       setProducts(products.filter((p) => p.id !== product.id));
       setSelectedProduct(null);
