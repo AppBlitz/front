@@ -1,11 +1,9 @@
 import { createBrowserRouter } from "react-router";
-import App from "../App";
 import { Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable, RecipeTable, CreateRecipes, CreateEmployee, ProductHistory } from "../pages";
-import { RecipeTablemanager } from "../pages/employee/Manager/recipes";
 
 export const router = createBrowserRouter([
   {
-    path: "/", Component: App,
+    path: "/", Component: ProductHistory,
   },
   {
     path: "login", Component: Login
@@ -37,9 +35,6 @@ export const router = createBrowserRouter([
   {
     path: "productmanager", Component: ProductHistory
   },
-  {
-    path: "recipemanager", Component: RecipeTablemanager
-  }
 
 
 

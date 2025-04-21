@@ -13,8 +13,6 @@ function ProductCards() {
   const [showModal, setShowModal] = useState(false);
   const [productToMove, setProductToMove] = useState<Products | null>(null);
 
-  // const [showQueryModal, setShowQueryModal] = useState(false);
-  // const [queryResults, setQueryResults] = useState<Movementsconsult[] | null>(null);
 
   const handleRegisterMovement = (product: Products) => {
     setProductToMove(product);
@@ -47,6 +45,7 @@ function ProductCards() {
 
   const handleDeleteProduct = (product: Products) => {
     if (window.confirm(`¿Deseas eliminar el producto "${product.nameProduct}"?`)) {
+      instance.delete(`product/delete/${product.id}`)
       setProducts(products.filter((p) => p.id !== product.id));
       setSelectedProduct(null);
     }
