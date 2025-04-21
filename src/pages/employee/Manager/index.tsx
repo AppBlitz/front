@@ -6,6 +6,8 @@ import { MovementForm } from "../../../pages/product/movement/index"
 //import { Movements } from "../../../types/movementProduct";
 import { Movementsconsult } from "../../../types/movementProduct";
 import { instance } from "../../../service/api";
+import { Employee } from "../../../types/employee";
+
 
 const ProductHistory = () => {
   const [products, setProducts] = useState<Products[] | null>([]);
@@ -16,6 +18,12 @@ const ProductHistory = () => {
 
   const [showQueryModal, setShowQueryModal] = useState(false);
   const [queryResults, setQueryResults] = useState<Movementsconsult[] | null>(null);
+
+  const [showEmployeeModal, setShowEmployeeModal] = useState(false);
+  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [selectedEmployee, setSelectedEmployee] = useState<string | null>(null);
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [employeeMovements, setEmployeeMovements] = useState<Movementsconsult[] | null>(null);
 
   const handleRegisterMovement = (product: Products) => {
     setProductToMove(product);
@@ -35,6 +43,14 @@ const ProductHistory = () => {
         console.error("Error al cargar los productos:", error);
         setProducts([]);
       });
+  }, []);
+
+  useEffect(() => {
+    instance.get("/employees/getAll").then((res) => {
+      setEmployees(res.data);
+    }).catch((err) => {
+      console.error("Error al obtener empleados", err);
+    });
   }, []);
 
   const handleSelectProduct = (product: Products) => {
@@ -208,6 +224,93 @@ const ProductHistory = () => {
           </div>
         </div>
       )}
+      <button
+  className="fixed bottom-6 left-6 bg-indigo-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-indigo-700 transition"
+  onClick={() => setShowEmployeeModal(true)}
+>
+  Historial por Empleado
+</button>
+
+{showEmployeeModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <h2 className="text-xl font-bold mb-4">Historial por Empleado</h2>
+      <form onSubmit={async (e) => {
+        e.preventDefault();
+        if (!selectedEmployee || !selectedDate) return;
+
+        try {
+          const res = await instance.get("/product/historyEmployee", {
+            params: {
+              employeeId: selectedEmployee,
+              date: selectedDate
+            }
+          });
+          setEmployeeMovements(res.data);
+        } catch (error) {
+          console.error("Error al consultar historial del empleado:", error);
+        }
+      }}>
+        <div className="space-y-4">
+          <div>
+            <label className="block font-medium">Empleado:</label>
+            <select
+              value={selectedEmployee ?? ""}
+              onChange={(e) => setSelectedEmployee(e.target.value)}
+              required
+              className="w-full border rounded px-3 py-2"
+            >
+              <option value="">Seleccione un empleado</option>
+              {employees.map((emp) => (
+                <option key={emp.id} value={emp.id}>{emp.nameEmployee}</option>
+              ))}
+            </select>
+          </div>
+          <div>
+            <label className="block font-medium">Fecha:</label>
+            <input
+              type="date"
+              value={selectedDate}
+              onChange={(e) => setSelectedDate(e.target.value)}
+              required
+              className="w-full border rounded px-3 py-2"
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <button type="submit" className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700">
+              Consultar
+            </button>
+            <button
+              onClick={() => { setShowEmployeeModal(false); setEmployeeMovements(null); }}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              type="button"
+            >
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </form>
+
+      {employeeMovements && (
+        <div className="mt-6 max-h-60 overflow-y-auto">
+          <h3 className="font-semibold mb-2">Movimientos realizados:</h3>
+          <ul className="list-disc list-inside text-sm">
+            {employeeMovements.length > 0 ? (
+              employeeMovements.map((m, i) => (
+                <li key={i}>
+                  <span className="font-medium">{m.action}</span> - [{m.nameProduct}] cantidad: {m.amount} - ({m.reason})
+                </li>
+              ))
+            ) : (
+              <li>No trabajó ese día o no hubo movimientos.</li>
+            )}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+)}
+
 
     </>
   );

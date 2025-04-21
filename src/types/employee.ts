@@ -17,6 +17,7 @@ type EmployeeCreate = {
   area: AREA
   eps: EPS
   roll: roll
+  schedule: Partial<Record<DayOfWeek, Hora>>
 }
 type roll = {
   rollEmployee: RollEmployee
@@ -109,5 +110,42 @@ enum RollEmployee {
   CASHIEREMPLOYE = "CASHIEREMPLOYE",
   WAREHOUSEEMPLOYEE = "WAREHOUSEEMPLOYEE"
 }
-export type { EmployeeCreate, user }
+enum DayOfWeek {
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+  SUNDAY = "SUNDAY"
+}
+
+type Hora = {
+  startTime: string // formato "HH:mm"
+  endTime: string   // formato "HH:mm"
+}
+
+type Employee = {
+  id:string
+  nameEmployee: string
+  address: string
+  city: string
+  phoneNumber: string
+  entryDate: string
+  retirementDate: string
+  isRetired: boolean
+  baseSalary: number
+  email: string
+  password: string
+  cesantias: Cesantias
+  pension: Pension
+  riskLevel: RiskLevel
+  ccf: CCF
+  arl: ARL
+  area: AREA
+  eps: EPS
+  roll: roll
+  schedule: Partial<Record<DayOfWeek, Hora>>
+}
+export type { EmployeeCreate, user,Employee }
 export { Cesantias, Pension, RiskLevel, ARL, AREA, EPS, PayrollConcept, Permisions, RollEmployee, Objeto }
