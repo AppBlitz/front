@@ -19,3 +19,9 @@ export enum Estate {
   ACTIVE,
   INACTIVE
 }
+
+export type Recipesconsult = {
+  Action: String
+  time:string
+  details: String
+}

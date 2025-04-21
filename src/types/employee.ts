@@ -16,18 +16,22 @@ type EmployeeCreate = {
   arl: ARL
   area: AREA
   eps: EPS
-  rol: rol
+  roll: roll
 }
-type rol = {
+type roll = {
   rollEmployee: RollEmployee
-  permissions: Permisions[]
+  permissions: PermissionsEmployee[]
 }
 type user = {
   email: string,
   password: string
 }
+type PermissionsEmployee = {
+  permissions: Permisions[]
+  objeto: Objeto
+}
 enum Cesantias {
-  PROVENIR = "PROVENIR",
+  PROVENIR = "PORVENIR",
   COLFONDOS = "COLFONDOS",
   FNA = "FNA",
   PROTECCION = "PROTECCION"
@@ -88,6 +92,11 @@ enum PayrollConcept {
   CCF = "CCF",
 }
 
+enum Objeto {
+  OB_PRODUCT = "OB_PRODUCT",
+  OB_RECETA = "OB_RECETA"
+}
+
 enum Permisions {
   CREAR = "CREAR",
   ELIMINAR = "ELIMINAR",
@@ -100,5 +109,5 @@ enum RollEmployee {
   CASHIEREMPLOYE = "CASHIEREMPLOYE",
   WAREHOUSEEMPLOYEE = "WAREHOUSEEMPLOYEE"
 }
-export type { EmployeeCreate, user, rol }
-export { Cesantias, Pension, RiskLevel, ARL, AREA, EPS, PayrollConcept, Permisions, RollEmployee }
+export type { EmployeeCreate, user }
+export { Cesantias, Pension, RiskLevel, ARL, AREA, EPS, PayrollConcept, Permisions, RollEmployee, Objeto }

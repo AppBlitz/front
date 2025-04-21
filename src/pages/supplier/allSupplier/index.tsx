@@ -17,7 +17,9 @@ function SupplierTable() {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        const response = await instance.get("supplier/all");
+        //const response = await instance.get("supplier/all");
+        const response = await instance.get(`http://localhost:8080/supplier/all`)
+
         const data = response.data.map((supplier: Supplier) => ({
           ...supplier,
           orderDate: new Date(supplier.orderDate),
@@ -45,10 +47,10 @@ function SupplierTable() {
     try {
       let state: string = "";
       if (updatedSupplier.stateActivity === "INACTIVO") {
-        state = "IDLE";
+        state = "INACTIVO";
       }
       else {
-        state = "ASSET"
+        state = "ACTIVO"
       }
       await instance.put("supplier/edit", {
         id: updatedSupplier.id,
@@ -71,11 +73,11 @@ function SupplierTable() {
     }
   };
 
-  const handleDeleteSupplier = async (id: number) => {
+  const handleDeleteSupplier = async (id: string) => {
     try {
       await instance.delete("supplier/delete/" + id);
       setSuppliers((prevSuppliers) =>
-        prevSuppliers.filter((supplier) => parseInt(supplier.id) !== id)
+        prevSuppliers.filter((supplier) => supplier.id !== id)
       );
       console.log("Proveedor eliminado:", id);
     } catch (error) {
@@ -84,7 +86,7 @@ function SupplierTable() {
   };
   function verificationState() {
     console.log(selectedSupplier?.stateActivity)
-    if (selectedSupplier?.stateActivity + "" === "IDLE") {
+    if (selectedSupplier?.stateActivity === "INACTIVO") {
       return "Inactivo";
     }
     else {
@@ -137,7 +139,7 @@ function SupplierTable() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleDeleteSupplier(parseInt(supplier.id));
+                          handleDeleteSupplier(supplier.id);
                         }}
                         className="bg-red-500 text-white px-3 py-1 rounded-full"
                       >
@@ -221,7 +223,7 @@ function SupplierTable() {
                     onChange={(e) =>
                       setEditingSupplier({
                         ...editingSupplier,
-                        stateActivity: e.target.value as "ACTIVO" | "INACTIVO"
+                        stateActivity: e.target.value as "ACTIVO" | "INACTIVO",
                       })
                     }
                     className="border rounded px-4 py-2 w-full"
