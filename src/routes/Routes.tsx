@@ -1,9 +1,18 @@
 import { createBrowserRouter } from "react-router";
+import App from "../App";
+import Test from "../pages/test/Test";
+import Payroll from "../pages/payroll/payroll/index"
+import Pay from "../pages/payroll/pay/index"
+import Update from "../pages/payroll/update/index"
+import Payrolls from "../pages/payroll/index"
 import { Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable, RecipeTable, CreateRecipes, CreateEmployee, ProductHistory } from "../pages";
 
 export const router = createBrowserRouter([
   {
     path: "/", Component: ProductHistory,
+  },
+  {
+    path: "test", Component: Test
   },
   {
     path: "login", Component: Login
@@ -29,6 +38,7 @@ export const router = createBrowserRouter([
   {
     path: "create/recipe", Component: CreateRecipes
   },
+
   {
     path: "create/employee", Component: CreateEmployee
   },
@@ -36,6 +46,19 @@ export const router = createBrowserRouter([
     path: "productmanager", Component: ProductHistory
   },
 
+  //rutas nomina
+  {
+    path: "payrolls", Component: Payrolls
+  },
+  {
+    path: "payrolls/payroll", Component: Payroll
+  },
+  {
+    path: "payrolls/updates", Component: Update
+  },
+  {
+    path: "payrolls/pay", Component: Pay
+  },
 
 
 
