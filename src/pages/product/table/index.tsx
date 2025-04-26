@@ -1,17 +1,28 @@
-
 import { Header } from "../../../components";
 import { useState, useEffect } from "react";
-import { Product } from "../../../types/Product";
-import axios from "axios";
+import { Products } from "../../../types/Product";
+import { MovementForm } from "../movement/index";
+//import { Movements } from "../../../types/movementProduct";
+// import { Movementsconsult } from "../../../types/movementProduct";
+import { instance } from "../../../service/api";
 
 function ProductCards() {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [products, setProducts] = useState<Products[]>([]);
+  const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
+
+  const [showModal, setShowModal] = useState(false);
+  const [productToMove, setProductToMove] = useState<Products | null>(null);
+
+
+  const handleRegisterMovement = (product: Products) => {
+    setProductToMove(product);
+    setShowModal(true);
+  };
 
   useEffect(() => {
-    axios.get("http://localhost:8080/product/allProducts")
+    instance.get("product/allProducts")
       .then((response) => {
-        const formattedProducts = response.data.map((product: Product) => ({
+        const formattedProducts = response.data.map((product: Products) => ({
           ...product,
           images: product.images || [],
         }));
@@ -23,21 +34,23 @@ function ProductCards() {
       });
   }, []);
 
-  const handleSelectProduct = (product: Product) => {
+  const handleSelectProduct = (product: Products) => {
     setSelectedProduct(selectedProduct?.id === product.id ? null : product);
   };
 
-  const handleEditProduct = (product: Product) => {
+  const handleEditProduct = (product: Products) => {
     console.log("Editar producto:", product);
     setSelectedProduct(product);
   };
 
-  const handleDeleteProduct = (product: Product) => {
+  const handleDeleteProduct = (product: Products) => {
     if (window.confirm(`¿Deseas eliminar el producto "${product.nameProduct}"?`)) {
+      instance.delete(`product/delete/${product.id}`)
       setProducts(products.filter((p) => p.id !== product.id));
       setSelectedProduct(null);
     }
   };
+
 
   return (
     <>
@@ -79,20 +92,122 @@ function ProductCards() {
                     </div>
                   )}
 
-                  <div className="flex justify-between mt-4">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600" onClick={(e) => { e.stopPropagation(); handleEditProduct(product); }}>
-                      Editar
-                    </button>
-                    <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600" onClick={(e) => { e.stopPropagation(); handleDeleteProduct(product); }}>
-                      Eliminar
-                    </button>
+                  <div className="flex justify-between mt-4 gap-2 flex-wrap">
+                    <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600" onClick={(e) => {
+                      e.stopPropagation();
+                      handleEditProduct(product);
+                    }}>Editar</button>
+                    <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600" onClick={(e) => {
+                      e.stopPropagation();
+                      handleDeleteProduct(product);
+                    }}>Eliminar</button>
+                    <button className="bg-green-500 text-white px-4 py-2 rounded-full hover:bg-green-600" onClick={(e) => {
+                      e.stopPropagation();
+                      handleRegisterMovement(product);
+                    }}>Registrar Movimiento</button>
                   </div>
+
                 </div>
               )}
             </div>
           ))}
         </div>
       </div>
+      {showModal && productToMove && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md">
+            <MovementForm productId={productToMove.id} onClose={() => setShowModal(false)} />
+            <div className="mt-4 text-right">
+              <button
+                className="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600"
+                onClick={() => setShowModal(false)}>
+                Cerrar </button>
+            </div>
+          </div>
+        </div>
+      )
+      }
+      {/*
+          <button className="fixed bottom-6 right-6 bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 transition"
+          onClick={() => setShowQueryModal(true)} > Consultar movimientos en el inventario </button>  
+
+{showQueryModal && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+      <h2 className="text-xl font-bold mb-4">Consultar Movimientos</h2>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const form = e.target as HTMLFormElement;
+          const date = (form.elements.namedItem("date") as HTMLInputElement).value;
+          const startHour = (form.elements.namedItem("startHour") as HTMLInputElement).value;
+          const endHour = (form.elements.namedItem("endHour") as HTMLInputElement).value;
+
+          try {
+            let res;
+            if (startHour && endHour) {
+              res = await axios.get(`http://localhost:8080/product/movementByRangeHour`, {
+                params: {
+                  date,
+                  startHour: parseInt(startHour),
+                  endHour: parseInt(endHour),
+                },
+              });
+            } else {
+              res = await axios.get(`http://localhost:8080/product/movementByDate`, {
+                params: { date },
+              });
+            }
+            setQueryResults(res.data);
+          } catch (error) {
+            console.error("Error al consultar movimientos:", error);
+          }
+        }}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block font-medium">Fecha:</label>
+            <input type="date" name="date" required className="w-full border rounded px-3 py-2" />
+          </div>
+          <div>
+            <label className="block font-medium">Hora inicio (opcional):</label>
+            <input type="number" name="startHour" className="w-full border rounded px-3 py-2" min={0} max={23} />
+          </div>
+          <div>
+            <label className="block font-medium">Hora fin (opcional):</label>
+            <input type="number" name="endHour" className="w-full border rounded px-3 py-2" min={0} max={23} />
+          </div>
+          <div className="flex justify-end gap-2">
+            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+              Consultar
+            </button>
+            <button onClick={() => { setShowQueryModal(false); setQueryResults(null); }} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+              Cerrar
+            </button>
+          </div>
+        </div>
+      </form>
+
+      {queryResults && (
+        <div className="mt-6 max-h-60 overflow-y-auto">
+          <h3 className="font-semibold mb-2">Resultados:</h3>
+          <ul className="list-disc list-inside text-sm">
+            {queryResults.length > 0 ? (
+              queryResults.map((m, i) => (
+                <li key={i}>
+                  <span className="font-medium"> {m.action}</span> - [{m.nameProduct}] cantidad : {m.amount} - ({m.reason})
+                </li>
+              ))
+            ) : (
+              <li>No se encontraron movimientos.</li>
+            )}
+          </ul>
+        </div>
+      )}
+    </div>
+  </div>
+)} */}
+
     </>
   );
 }
