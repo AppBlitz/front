@@ -2,13 +2,17 @@
 import { useState, useEffect } from "react";
 import { Header } from "../../../components";
 import { instance } from "../../../service/api";
-import { createRecipe, Estate, Ingredient } from "../../../types/recipe";
+import { createRecipe, Estate, Recipesconsult } from "../../../types/recipe";
 
 
-function RecipeTable() {
-  const [recipes, setRecipes] = useState<createRecipe[]>([])
+function RecipeTablemanager() {
+  const [recipes, setRecipes] = useState<createRecipe[]>([]);
   const [selectedRecipe, setSelectedRecipe] = useState<createRecipe | null>(null);
   const [editingRecipe, setEditingRecipe] = useState<createRecipe | null>(null);
+
+  const [showRecipeModal, setShowRecipeModal] = useState(false);
+  const [recipeResults, setRecipeResults] = useState<Recipesconsult[] | null>(null);
+
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -147,7 +151,7 @@ function RecipeTable() {
                 <p><strong>Porciones:</strong> {selectedRecipe.servings}</p>
                 <p><strong>Ingredientes:</strong></p>
                 <ul>
-                  {selectedRecipe.ingredients.map((ingredient: Ingredient, index: number) => (
+                  {selectedRecipe.ingredients.map((ingredient, index) => (
                     <li key={index}>
                       {ingredient.quantity} {ingredient.unitOfMeasure} de {ingredient.productId}{" "}
                       {ingredient.additionalNotes && `(${ingredient.additionalNotes})`}
@@ -205,7 +209,7 @@ function RecipeTable() {
                   />
 
                   <label className="block mt-4">Ingredientes:</label>
-                  {editingRecipe.ingredients.map((ingredient, index: number) => (
+                  {editingRecipe.ingredients.map((ingredient, index) => (
                     <div key={index} className="mt-2">
                       <input
                         type="text"
@@ -323,8 +327,87 @@ function RecipeTable() {
           </div>
         </div>
       </div>
+      <button className="fixed bottom-6 right-80 bg-pink-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-pink-700 transition"
+        onClick={() => setShowRecipeModal(true)}> Consultar movimientos de recetas </button>
+      {showRecipeModal && (
+        <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+          <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
+            <h2 className="text-xl font-bold mb-4">Consultar Movimientos de Recetas</h2>
+            <form
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.target as HTMLFormElement;
+                const date = (form.elements.namedItem("date") as HTMLInputElement).value;
+                const startHour = (form.elements.namedItem("startHour") as HTMLInputElement).value;
+                const endHour = (form.elements.namedItem("endHour") as HTMLInputElement).value;
+
+                try {
+                  let res;
+                  if (startHour && endHour) {
+                    res = await instance.get(`api/recipes/movementByRangeHour`, {
+                      params: {
+                        date,
+                        startHour: parseInt(startHour),
+                        endHour: parseInt(endHour),
+                      },
+                    });
+                  } else {
+                    res = await instance.get(`http://localhost:8080/api/recipes/movementByDate`, {
+                      params: { date },
+                    });
+                  }
+                  setRecipeResults(res.data);
+                } catch (error) {
+                  console.error("Error al consultar movimientos de recetas:", error);
+                }
+              }}
+            >
+              <div className="space-y-4">
+                <div>
+                  <label className="block font-medium">Fecha:</label>
+                  <input type="date" name="date" required className="w-full border rounded px-3 py-2" />
+                </div>
+                <div>
+                  <label className="block font-medium">Hora inicio (opcional):</label>
+                  <input type="number" name="startHour" className="w-full border rounded px-3 py-2" min={0} max={23} />
+                </div>
+                <div>
+                  <label className="block font-medium">Hora fin (opcional):</label>
+                  <input type="number" name="endHour" className="w-full border rounded px-3 py-2" min={0} max={23} />
+                </div>
+                <div className="flex justify-end gap-2">
+                  <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
+                    Consultar
+                  </button>
+                  <button onClick={() => { setShowRecipeModal(false); setRecipeResults(null); }} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
+                    Cerrar
+                  </button>
+                </div>
+              </div>
+            </form>
+
+            {recipeResults && (
+              <div className="mt-6 max-h-60 overflow-y-auto">
+                <h3 className="font-semibold mb-2">Resultados:</h3>
+                <ul className="list-disc list-inside text-sm">
+                  {recipeResults.length > 0 ? (
+                    recipeResults.map((r, i) => (
+                      <li key={i}>
+                        <span className="font-medium">{r.Action}</span> - {r.time} - {r.details}
+                      </li>
+                    ))
+                  ) : (
+                    <li>No se encontraron movimientos de recetas.</li>
+                  )}
+                </ul>
+              </div>
+            )}
+          </div>
+        </div>
+      )}
+
     </>
   );
 }
 
-export { RecipeTable };
+export { RecipeTablemanager };

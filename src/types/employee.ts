@@ -16,9 +16,23 @@ type EmployeeCreate = {
   arl: ARL
   area: AREA
   eps: EPS
+  roll: roll
+  schedule: Partial<Record<DayOfWeek, Hora>>
+}
+type roll = {
+  rollEmployee: RollEmployee
+  permissions: PermissionsEmployee[]
+}
+type user = {
+  email: string,
+  password: string
+}
+type PermissionsEmployee = {
+  permissions: Permisions[]
+  objeto: Objeto
 }
 enum Cesantias {
-  PROVENIR = "PROVENIR",
+  PROVENIR = "PORVENIR",
   COLFONDOS = "COLFONDOS",
   FNA = "FNA",
   PROTECCION = "PROTECCION"
@@ -59,5 +73,79 @@ enum EPS {
   SURA = "SURA",
   SANITAS = "SANITAS",
 }
-export type { EmployeeCreate, Cesantias, Pension, RiskLevel, ARL, AREA, EPS }
 
+enum PayrollConcept {
+  BONUS_AND_COMMISSIONS = "BONUS_AND_COMMISSIONS",
+  DAYTIME_OVERTIME_HOURS = "DAYTIME_OVERTIME_HOURS",
+  NIGHTTIME_OVERTIME_HOURS = "NIGHTTIME_OVERTIME_HOURS",
+  SUNDAY_OVERTIME_HOURS = "SUNDAY_OVERTIME_HOURS",
+  SUNDAY_NIGHTTIME_OVERTIME_HOURS = "SUNDAY_NIGHTTIME_OVERTIME_HOURS",
+  DEDUCTION = "DEDUCTION",
+  LEAVE_WITHOUT_PAY = "LEAVE_WITHOUT_PAY",
+  VACATION_PAY = "VACATION_PAY",
+  INCAPACITY = "INCAPACITY",
+  TRANSPORTATION_ALLOWANCE = "TRANSPORTATION_ALLOWANCE",
+  PRIMA = "PRIMA",
+  CESANTIAS = "CESANTIAS",
+  ARL = "ARL",
+  EPS = "EPS",
+  PENSION = "PENSION",
+  CCF = "CCF",
+}
+
+enum Objeto {
+  OB_PRODUCT = "OB_PRODUCT",
+  OB_RECETA = "OB_RECETA"
+}
+
+enum Permisions {
+  CREAR = "CREAR",
+  ELIMINAR = "ELIMINAR",
+  CONSULTAR = "CONSULTAR",
+  EDITAR = "EDITAR"
+}
+
+enum RollEmployee {
+  KITCHENEMPLOYEE = "KITCHENEMPLOYEE",
+  CASHIEREMPLOYE = "CASHIEREMPLOYE",
+  WAREHOUSEEMPLOYEE = "WAREHOUSEEMPLOYEE"
+}
+enum DayOfWeek {
+  MONDAY = "MONDAY",
+  TUESDAY = "TUESDAY",
+  WEDNESDAY = "WEDNESDAY",
+  THURSDAY = "THURSDAY",
+  FRIDAY = "FRIDAY",
+  SATURDAY = "SATURDAY",
+  SUNDAY = "SUNDAY"
+}
+
+type Hora = {
+  startTime: string // formato "HH:mm"
+  endTime: string   // formato "HH:mm"
+}
+
+type Employee = {
+  id:string
+  nameEmployee: string
+  address: string
+  city: string
+  phoneNumber: string
+  entryDate: string
+  retirementDate: string
+  isRetired: boolean
+  baseSalary: number
+  email: string
+  password: string
+  cesantias: Cesantias
+  pension: Pension
+  riskLevel: RiskLevel
+  ccf: CCF
+  arl: ARL
+  area: AREA
+  eps: EPS
+  roll: roll
+  schedule: Partial<Record<DayOfWeek, Hora>>
+}
+export type { EmployeeCreate, user,Employee }
+export { Cesantias, Pension, RiskLevel, ARL, AREA, EPS, PayrollConcept, Permisions, RollEmployee, Objeto }
