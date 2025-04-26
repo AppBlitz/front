@@ -5,6 +5,8 @@ function Options() {
     <div>
       <a onClick={() => history("/recipe")} className="font-serif text-white hover:text-blue-400 cursor-pointer" >Recetas</a>
       <a onClick={() => history("/product")} className="font-serif text-white hover:text-blue-400 cursor-pointer"> Product</a>
+      <a className="font-serif text-white hover:text-blue-400 cursor-pointer"> | </a>
+      <a onClick={() => history("/sales/home")} className="font-serif text-white hover:text-blue-400 cursor-pointer" > Ventas</a>
     </div>
   );
 }

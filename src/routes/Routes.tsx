@@ -6,7 +6,8 @@ import Payroll from "../pages/payroll/payroll/index"
 import Pay from "../pages/payroll/pay/index"
 import Update from "../pages/payroll/update/index"
 import Payrolls from "../pages/payroll/index"
-
+import { salesRoutes } from "./Routes_sales";
+import { testsRoutes } from "./Routes_tests";
 export const router = createBrowserRouter([
   {
     path: "/", Component: App,
@@ -52,8 +53,10 @@ export const router = createBrowserRouter([
   {
     path: "payrolls/pay", Component: Pay
   },
+  // Agregando rutas desde Routes_sales
+  ...salesRoutes,
 
-
-
+  // Agregando rutas desde Routes_tests
+  ...testsRoutes,
 
 ]);
