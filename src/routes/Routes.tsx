@@ -5,13 +5,10 @@ import Payroll from "../pages/payroll/payroll/index"
 import Pay from "../pages/payroll/pay/index"
 import Update from "../pages/payroll/update/index"
 import Payrolls from "../pages/payroll/index"
-<<<<<<< HEAD
 import { salesRoutes } from "./Routes_sales";
 import { testsRoutes } from "./Routes_tests";
-=======
 import { Login, Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable, RecipeTable, CreateRecipes, CreateEmployee, ProductHistory } from "../pages";
 
->>>>>>> 9ccda125ccba2bc88038ed8728636876cc767ed0
 export const router = createBrowserRouter([
   {
     path: "/", Component: ProductHistory,
