@@ -4,7 +4,7 @@ import Navbar from "../../generics/navbar";
 const Navbar_home: React.FC = () => {
   const tabs = [
     { label: "Inicio", url: "/sales/home" },
-    { label: "Realizar pedido", url: "/sales/shop-cart/details" },
+    { label: "Realizar pedido", url: "/sales/shop-cart/get" },
     { label: "Ver pedidos", url: "/sales/shop-cart/list" },
     
   ];

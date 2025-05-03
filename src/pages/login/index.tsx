@@ -9,10 +9,10 @@ function Login() {
   const navigate = useNavigate()
   function loginUser(user: loginUser) {
     // FIX: this add url of login user
-    instance.post("", {
+    instance.post("employees/user/login", {
       data: {
-        emailUser: user.emailUser,
-        passwordUser: user.passwordUser
+        email: user.emailUser,
+        password: user.passwordUser
       }
     })
   }
