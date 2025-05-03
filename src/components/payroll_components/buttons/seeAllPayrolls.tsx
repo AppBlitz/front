@@ -1,5 +1,5 @@
 import React from "react";
-import Button from "../../generics/button";
+import Button from "../../generics/button_url";
 
 const SeeAllPayrolls: React.FC = () => {
   return (
