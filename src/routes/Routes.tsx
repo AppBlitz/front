@@ -11,6 +11,7 @@ import { Register, RegisterSupplier, UpdateSupplier, ProductCards, SupplierTable
 import { generalRoutes } from "./front/Routes_general";
 import { loginRoute } from "./front/Route_login";
 
+
 export const router = createBrowserRouter([
   {
     path: "/", Component: ProductHistory,
