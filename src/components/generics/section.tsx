@@ -1,5 +1,5 @@
 import React from "react";
-import "./css/Section.css"; // Archivo CSS aparte
+import "./css/section.css"; // Archivo CSS aparte
 
 interface SectionProps {
   children: React.ReactNode; // El contenido que irá dentro del Section
