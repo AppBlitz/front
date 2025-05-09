@@ -1,6 +1,6 @@
 import React from "react";
 import TableComponent from "../../generics/table"; // Importa el componente de la tabla
-import Button from "../../generics/button_url";
+import Button from "../../generics/button";
 
 const Tabla_menu: React.FC = () => {
   // Define los nombres de las columnas

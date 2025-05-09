@@ -1,12 +1,11 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; 
-import Navbar from "../../../components/sales_components/navbars/navbar_shopCart";
+import Navbar from "../../../components/sales_components/navbars/navbar_invoice"
 import { Footer } from "../../../components/sales_components/footer_sales";
-import OrdersTable from "../../../components/sales_components/shopCart/orderTable"; // 👈 Ahora usamos OrdersTable
 
-const ShopCart_list: React.FC = () => {
+const Invoice_new: React.FC = () => {
   const location = useLocation();
-  const navigate = useNavigate();
+  const navigate = useNavigate(); // Inicializamos useNavigate
   const queryParams = new URLSearchParams(location.search);
   const userRole = queryParams.get("role");
   const token = queryParams.get("token");
@@ -15,17 +14,16 @@ const ShopCart_list: React.FC = () => {
   // Redirigir si no hay role
   useEffect(() => {
     if (!userRole||userRole=="") {
-      navigate("/sale/login"); 
+      navigate("/sale/login"); // Redirige a la página de login
     }
   }, [userRole, navigate]);
-
   return (
-    <div>
-      <Navbar userRole={userRole || ""} userId={userId || ""} token={token || ""} />
-      <OrdersTable />
-      <Footer />
-    </div>
+  <div>
+    <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
+
+    <Footer/>
+  </div>
   ); 
 };
 
-export default ShopCart_list;
+export default Invoice_new;
