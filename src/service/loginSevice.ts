@@ -9,8 +9,7 @@ export const loginUser = async (email: string, password: string) => {
     });
 
     if (response.status === 200) {
-        window.location.href = "/sales/home";
-      return { success: true, message: "Inicio de sesión exitoso" };
+      return { success: true, roll: response.data.roll, id: response.data.id, phoneNumber: response.data.phoneNumber };
     } else {
       return { success: false, message: response.data.error || "Ocurrió un problema" };
     }

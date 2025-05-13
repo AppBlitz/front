@@ -1,41 +1,54 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
+import GenerateData from "../../service/generateRoute";
 import "./css/navbar.css";
 
-// Tipo para los elementos de pestañas
-type Tab = {
-  label: string;
-  url: string;
-};
-
-type NavbarProps = {
+interface NavbarProps {
   leftLabel: string;
   topLabel: string;
-  tabs: Tab[];
-};
+  userId: string;
+  token: string;
+  userRole: string;
+  tabs: { label: string; url: string; allowedRoles?: string[] }[];
+}
 
-const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, tabs }) => {
+const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, token, tabs }) => {
+  const navigate = useNavigate(); // Inicializa el hook de navegación
+
+  // Asignación de roles en español
+  const roleMap: Record<string, string> = {
+    KitchenEmployee: "Empleado de cocina",
+    CashierEmployee: "Cajero",
+    WarehouseEmployee: "Bodeguista",
+    WaiterEmployee: "Mesero",
+  };
+  const role = roleMap[userRole] || "Desconocido"; // Mejora la asignación de roles
+
   return (
-    <div className="navbar">
-      {/* Label superior */}
-      <div className="navbar-top-label">{topLabel}</div>
-
+    <nav className="navbar">
+      <h3 className="navbar-top-label">{topLabel}</h3>
       <div className="navbar-main">
-        {/* Label grande a la izquierda */}
-        <div className="navbar-left-label">{leftLabel}</div>
-
-        {/* Espacio vacío en el centro */}
+        <h2 className="navbar-left-label">{leftLabel}</h2>
         <div className="navbar-center"></div>
 
-        {/* Botones de pestañas en la esquina inferior derecha */}
-        <div className="navbar-tabs">
-          {tabs.map((tab, index) => (
-            <a key={index} href={tab.url} className="navbar-tab">
-              {tab.label}
-            </a>
-          ))}
-        </div>
+        {/* Lista de pestañas con navegación dinámica */}
+        <h3 className="navbar-role-label">{role}</h3>
+        <ul className="navbar-tabs">
+          {tabs.map((tab, index) =>
+            !tab.allowedRoles || tab.allowedRoles.includes(userRole) ? (
+              <li key={index}>
+                <button
+                  className="navbar-tab"
+                  onClick={() => navigate(tab.url + GenerateData(userRole, userId, token))} 
+                >
+                  {tab.label}
+                </button>
+              </li>
+            ) : null
+          )}
+        </ul>
       </div>
-    </div>
+    </nav>
   );
 };
 
