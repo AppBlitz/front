@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; 
 import Navbar from "../../../components/sales_components/navbars/navbar_shopCart";
 import { Footer } from "../../../components/sales_components/footer_sales";
-import OrdersTable from "../../../components/sales_components/shopCart/orderTable"; // 👈 Ahora usamos OrdersTable
+import OrdersTable from "../../../components/sales_components/shopCart/orderTable"; // Ahora usamos OrdersTable
 
 const ShopCart_list: React.FC = () => {
   const location = useLocation();

@@ -5,74 +5,53 @@ import ActionButton from "../../generics/button_action";
 interface OrderItem {
   id: number;
   nombre: string;
-  cantidad: number;
-  precio: number;
   tipo: "producto" | "receta";
-  isEditing?: boolean; // Estado de edición por fila
 }
 
 const OrdersManagement: React.FC = () => {
   const [menuItems, setMenuItems] = useState<OrderItem[]>([]);
+  const [productos, setProductos] = useState<OrderItem[]>([
+    { id: 1, nombre: "Carne", tipo: "producto" },
+    { id: 2, nombre: "Papas", tipo: "producto" },
+  ]);
+  const [recetas, setRecetas] = useState<OrderItem[]>([
+    { id: 3, nombre: "Hamburguesa", tipo: "receta" },
+    { id: 4, nombre: "Ensalada", tipo: "receta" },
+  ]);
   const [selectedItem, setSelectedItem] = useState<OrderItem | null>(null);
-  const [cantidad, setCantidad] = useState<number>(1);
-  const [precio, setPrecio] = useState<number>(0);
 
-  const productos: OrderItem[] = [
-    { id: 1, nombre: "Carne", cantidad: 0, precio: 0, tipo: "producto" },
-    { id: 2, nombre: "Papas", cantidad: 0, precio: 0, tipo: "producto" },
-  ];
-
-  const recetas: OrderItem[] = [
-    { id: 3, nombre: "Hamburguesa", cantidad: 0, precio: 0, tipo: "receta" },
-    { id: 4, nombre: "Ensalada", cantidad: 0, precio: 0, tipo: "receta" },
-  ];
-
-  // Agregar al menú
+  // Agregar al menú y eliminar de la lista original
   const agregarAlMenu = () => {
     if (selectedItem) {
-      const nuevoItem: OrderItem = { ...selectedItem, cantidad, precio, isEditing: false };
-      setMenuItems([...menuItems, nuevoItem]);
-      limpiarFormulario();
+      setMenuItems([...menuItems, selectedItem]);
+
+      if (selectedItem.tipo === "producto") {
+        setProductos(productos.filter((item) => item.id !== selectedItem.id));
+      } else {
+        setRecetas(recetas.filter((item) => item.id !== selectedItem.id));
+      }
+
+      setSelectedItem(null);
     }
   };
 
-  // Eliminar del menú
+  // Eliminar del menú y devolver a la lista original
   const eliminarDelMenu = (id: number) => {
-    setMenuItems(menuItems.filter((item) => item.id !== id));
+    const item = menuItems.find((element) => element.id === id);
+    if (item) {
+      if (item.tipo === "producto") {
+        setProductos([...productos, item]);
+      } else {
+        setRecetas([...recetas, item]);
+      }
+    }
+    setMenuItems(menuItems.filter((element) => element.id !== id));
   };
 
-  // Activar el modo edición para una fila específica
-  const activarEdicion = (id: number) => {
-    setMenuItems(
-      menuItems.map((item) =>
-        item.id === id ? { ...item, isEditing: true } : item
-      )
-    );
-  };
-
-  // Cancelar la edición de una fila
-  const cancelarEdicion = (id: number) => {
-    setMenuItems(
-      menuItems.map((item) =>
-        item.id === id ? { ...item, isEditing: false } : item
-      )
-    );
-  };
-
-  // Guardar los cambios en la fila editada
-  const guardarEdicion = (id: number, nuevaCantidad: number, nuevoPrecio: number) => {
-    setMenuItems(
-      menuItems.map((item) =>
-        item.id === id ? { ...item, cantidad: nuevaCantidad, precio: nuevoPrecio, isEditing: false } : item
-      )
-    );
-  };
-
-  // Limpiar formulario después de agregar o editar
-  const limpiarFormulario = () => {
-    setSelectedItem(null);
-    setCantidad(1);
-    setPrecio(0);
+  // Simulación de guardar datos
+  const guardarMenu = () => {
+    console.log("Menú guardado:", menuItems);
+    alert("Menú guardado correctamente.");
   };
 
   return (
@@ -115,16 +94,8 @@ const OrdersManagement: React.FC = () => {
 
       {selectedItem && (
         <div className="orders-definition">
-          <h3>Definir Datos</h3>
+          <h3>Agregar al Menú</h3>
           <p><strong>{selectedItem.nombre}</strong></p>
-          <div className="input-group">
-            <label>Precio unitario:</label>
-            <input type="number" value={precio} onChange={(e) => setPrecio(Number(e.target.value))} />
-          </div>
-          <div className="input-group">
-            <label>Cantidad:</label>
-            <input type="number" value={cantidad} onChange={(e) => setCantidad(Number(e.target.value))} />
-          </div>
           <ActionButton label="Agregar al Menú" onClickAction={agregarAlMenu} />
         </div>
       )}
@@ -133,53 +104,25 @@ const OrdersManagement: React.FC = () => {
         <h3>Menú</h3>
         <table className="orders-table">
           <thead>
-            <tr>
-              <th>ID Item</th>
-              <th>Nombre</th>
-              <th>Precio unitario</th>
-              <th>Cantidad</th>
-              <th>Valor total</th>
-              <th>Acción</th>
-            </tr>
+            <tr><th>ID Item</th><th>Nombre</th><th>Acción</th></tr>
           </thead>
           <tbody>
             {menuItems.map((item) => (
               <tr key={item.id}>
                 <td>{item.id}</td>
                 <td>{item.nombre}</td>
-                <td>
-                  {item.isEditing ? (
-                    <input type="number" defaultValue={item.precio} onChange={(e) => setPrecio(Number(e.target.value))} />
-                  ) : (
-                    `$${item.precio}`
-                  )}
-                </td>
-                <td>
-                  {item.isEditing ? (
-                    <input type="number" defaultValue={item.cantidad} onChange={(e) => setCantidad(Number(e.target.value))} />
-                  ) : (
-                    item.cantidad
-                  )}
-                </td>
-                <td>${item.precio * item.cantidad}</td>
-                <td>
-                  {item.isEditing ? (
-                    <>
-                      <ActionButton label="Guardar cambios" onClickAction={() => guardarEdicion(item.id, cantidad, precio)} />
-                      <ActionButton label="Cancelar" onClickAction={() => cancelarEdicion(item.id)} />
-                    </>
-                  ) : (
-                    <>
-                      <ActionButton label="Editar" onClickAction={() => activarEdicion(item.id)} />
-                      <ActionButton label="Eliminar" onClickAction={() => eliminarDelMenu(item.id)} />
-                    </>
-                  )}
-                </td>
+                <td><ActionButton label="Eliminar" onClickAction={() => eliminarDelMenu(item.id)} /></td>
               </tr>
             ))}
           </tbody>
         </table>
       </div>
+
+      {menuItems.length > 0 && (
+        <div className="orders-actions">
+          <ActionButton label="Guardar" onClickAction={guardarMenu} />
+        </div>
+      )}
     </div>
   );
 };
