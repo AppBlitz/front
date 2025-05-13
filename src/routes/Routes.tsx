@@ -1,5 +1,5 @@
 import { createBrowserRouter } from "react-router";
-import App from "../App";
+
 import Test from "../pages/test/Test";
 import Payroll from "../pages/payroll/payroll/index"
 import Pay from "../pages/payroll/pay/index"
@@ -14,7 +14,7 @@ import { loginRoute } from "./front/Route_login";
 
 export const router = createBrowserRouter([
   {
-    path: "/", Component: ProductHistory,
+    path: "/home", Component: ProductHistory,
   },
   {
     path: "test", Component: Test

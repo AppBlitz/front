@@ -3,59 +3,103 @@ import { useForm } from "react-hook-form"
 import { loginUser } from "../../types/user";
 import { instance } from "../../service/api";
 import { useNavigate } from "react-router"
+import { useState } from "react";
 
 function Login() {
+
   const { register, handleSubmit } = useForm<loginUser>();
   const navigate = useNavigate()
-  function loginUser(user: loginUser) {
-    // FIX: this add url of login user
-    instance.post("employees/user/login", {
-      data: {
-        email: user.emailUser,
-        password: user.passwordUser
+  const [message, setMessage] = useState(" "); // 🔹 Estado para mostrar el mensaje
+  const [messageType, setMessageType] = useState<"success" | "error" | " ">(" ");
+
+  const loginConfirmation = async (user : loginUser) => {
+    try {
+      const response = await instance.post("employees/user/login", {
+        email : user.emailUser,
+        password : user.passwordUser,
+      });
+  
+      if (response.status === 200) {
+          window.location.href = "/home";
+                setMessageType("success");
+                setMessage("Inicio de sesión exitoso");
+      } else {
+        setMessageType("error");
+        setMessage(response.data.error ||"Ocurrio un problema")
       }
-    })
-  }
+
+    } catch (error: any) {
+
+      setMessageType("error");
+      setMessage(error.response?.data?.error || "No se pudo conectar con el servidor");
+      
+    }
+  };
+
+  
+
   return (<>
     <Header />
-    <div className="bg-gray-200 text-white font-serif">
-      <div className="flex justify-self-center items-center h-screen">
-        <div className="bg-white rounded-xl w-96 h-112" >
-          <form onSubmit={handleSubmit(loginUser)}>
-            <section>
-              <h2 className="flex justify-left text-black pl-4 pt-4 text-lg">Registro</h2>
-            </section>
-            <section>
-              <p className="flex justify-left text-black pl-8 pt-2 text-xs">Ingreso a  Ilios </p>
-            </section>
-            <section className="pt-10">
-              <label className="flex justify-center text-black">Correo eléctronico</label>
-              <section className="flex justify-center text-white">
-                <input type="text" className="w-70 h-10 border border-black rounded-full text-black text-center" placeholder="Email"{...register("emailUser", { required: true, pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/ })} />
-              </section>
-            </section>
-            <section className="pt-10">
-              <label className="flex justify-center text-black">Contraseña</label>
-              <section className="flex justify-center">
-                <input type="password" className="border border-black rounded-full w-70 h-10 text-black text-center" placeholder="Password"{...register("passwordUser", { required: true })} />
-              </section>
-            </section>
-            <section className="flex justify-center pt-6">
-              <button type="submit" className="bg-black w-50 text-white rounded-full h-10 hover:cursor-pointer hover:bg-gray-400" > Ingresar</button>
-            </section>
-          </form>
-          <section className="flex justify-between items-center pt-15 w-full px-10">
-            <span onClick={() => navigate('/register')} className="text-blue-400 w-32 hover:text-black hover:cursor-pointer mx-5">
-              ¿No tiene cuenta?
-            </span>
-            {/* FIX: url for password */}
-            <a onClick={() => navigate("")} className="text-blue-400 hover:text-black hover:cursor-pointer mx-5">
-              Olvidó la contraseña
-            </a>
-          </section>
-        </div>
+<div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 font-serif">
+  <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
+    <form onSubmit={handleSubmit(loginConfirmation)}>
+      {/* Título */}
+      <h2 className="text-2xl font-semibold text-gray-800 mb-1">Inicio de sesión</h2>
+      <p className="text-sm text-gray-500 mb-6">Bienvenido a <strong>Ilios</strong></p>
+
+      {/* Email */}
+      <div className="mb-5">
+        <label className="block text-gray-700 text-sm mb-2">Correo electrónico</label>
+        <input
+          type="text"
+          placeholder="ejemplo@correo.com"
+          className="w-full px-4 py-2 border border-gray-300 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          {...register("emailUser", {
+            required: true,
+            pattern: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/,
+          })}
+        />
       </div>
-    </div>
+
+      {/* Contraseña */}
+      <div className="mb-6">
+        <label className="block text-gray-700 text-sm mb-2">Contraseña</label>
+        <input
+          type="password"
+          placeholder="••••••••"
+          className="w-full px-4 py-2 border border-gray-300 rounded-full text-gray-800 focus:outline-none focus:ring-2 focus:ring-blue-400"
+          {...register("passwordUser", { required: true })}
+        />
+      </div>
+
+      {/* Botón */}
+      <button
+        type="submit"
+        className="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-full transition duration-200"
+      >
+        Ingresar
+      </button>
+
+      {/* Mensaje de error o éxito */}
+      {message && (
+        <div className={`mt-4 text-center text-sm ${messageType === "error" ? "text-red-500" : "text-green-600"}`}>
+          {message}
+        </div>
+      )}
+
+      {/* Enlace olvidó contraseña */}
+      <div className="mt-6 text-center">
+        <a
+          onClick={() => navigate("")}
+          className="text-blue-500 hover:text-blue-700 text-sm cursor-pointer"
+        >
+          ¿Olvidó la contraseña?
+        </a>
+      </div>
+    </form>
+  </div>
+</div>
+
   </>)
 }
 export { Login }

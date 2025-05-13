@@ -1,9 +1,7 @@
 import { Header } from "../../../components";
 import { useState, useEffect } from "react";
 import { Products } from "../../../types/Product";
-import axios from "axios";
 import { MovementForm } from "../../../pages/product/movement/index"
-//import { Movements } from "../../../types/movementProduct";
 import { Movementsconsult } from "../../../types/movementProduct";
 import { instance } from "../../../service/api";
 import { Employee } from "../../../types/employee";
@@ -161,21 +159,23 @@ const ProductHistory = () => {
                 const endHour = (form.elements.namedItem("endHour") as HTMLInputElement).value;
 
                 try {
-                  let res;
+                  
                   if (startHour && endHour) {
-                    res = await axios.get(`http://localhost:8080/product/movementByRangeHour`, {
+                    const res = await instance.get(`product/movementByRangeHour`, {
                       params: {
                         date,
                         startHour: parseInt(startHour),
                         endHour: parseInt(endHour),
                       },
                     });
+                    setQueryResults(res.data);
                   } else {
-                    res = await axios.get(`http://localhost:8080/product/movementByDate`, {
+                    const res = await instance.get(`product/movementByDate`, {
                       params: { date },
                     });
+                    setQueryResults(res.data);
                   }
-                  setQueryResults(res.data);
+                  
                 } catch (error) {
                   console.error("Error al consultar movimientos:", error);
                 }

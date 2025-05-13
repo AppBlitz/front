@@ -90,10 +90,11 @@ function RecipeTable() {
       <Header />
       <div className="bg-gray-200 text-black font-serif">
         <div className="flex justify-center items-center h-screen">
-          <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6">
+          {/* <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6"> */}
+          <div className="h-screen overflow-y-auto p-6 bg-white">
             <h2 className="text-lg text-black">Lista de Recetas</h2>
-
-            <table className="table-auto w-full mt-6 border-collapse">
+            <div className="overflow-y-auto max-h-[400px] border rounded-lg mb-6">
+            <table className="table-auto w-full border-collapse">
               <thead>
                 <tr className="bg-gray-300">
                   <th className="border px-4 py-2 text-left">Nombre</th>
@@ -138,6 +139,7 @@ function RecipeTable() {
                 ))}
               </tbody>
             </table>
+            </div>
 
             {selectedRecipe && !editingRecipe && (
               <div className="mt-6 p-4 border bg-gray-100 rounded-lg">
