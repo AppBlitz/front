@@ -1,23 +1,38 @@
+<<<<<<< HEAD
 
+=======
+import React from "react";
+>>>>>>> master
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/loginSevice";
 import ActionButton from "../generics/button_action";
+import GenerateToken from "../../service/genearteToken";
+import GenerateData from "../../service/generateRoute";
 interface LoginFormProps {
   onLoginMessage: (message: string) => void;
 }
 
 export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
   const { register, handleSubmit } = useForm<{ emailUser: string; passwordUser: string }>();
-
+  const navigate = useNavigate(); // Inicializa useNavigate
   const onSubmit = async (data: { emailUser: string; passwordUser: string }) => {
     const result = await loginUser(data.emailUser, data.passwordUser);
+  
+    if (result.success && result.roll) {
+      const token = GenerateToken(result.roll, result.id);
+      navigate('/sales/home'+GenerateData(result.roll, result.id, token));
+    } else {
+      console.warn("Error:", result.message);
+    }
+  
     onLoginMessage(result.message);
   };
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
       <h2 className="text-black text-lg pl-4 pt-4">Login</h2>
-      <p className="text-black text-xs pl-8 pt-2">Inicia sesion para acceder al modulo de ventas</p>
+      <p className="text-black text-xs pl-8 pt-2">Inicia sesión para acceder al módulo de ventas</p>
 
       <div className="pt-10">
         <label className="text-black block text-center">Correo electrónico</label>
@@ -43,7 +58,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
       </div>
 
       <div className="flex justify-center pt-6">
-      <ActionButton label="Ingresar" onClickAction={handleSubmit(onSubmit)}/>
+        <ActionButton label="Ingresar" onClickAction={handleSubmit(onSubmit)} />
       </div>
     </form>
   );

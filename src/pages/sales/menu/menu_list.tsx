@@ -1,9 +1,12 @@
 import React, { useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom"; 
-import Navbar from "../../../components/sales_components/navbars/navbar_invoice"
+import Navbar from "../../../components/sales_components/navbars/navbar_menu"
 import { Footer } from "../../../components/sales_components/footer_sales";
+import Tabla_menu from "../../../components/sales_components/tablas/tabla_menu";
+import Section from "../../../components/generics/section";
+import Button from "../../../components/generics/button";
 
-const Invoice_details: React.FC = () => {
+const Menu_list: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Inicializamos useNavigate
   const queryParams = new URLSearchParams(location.search);
@@ -20,10 +23,24 @@ const Invoice_details: React.FC = () => {
   return (
   <div>
     <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
-
+    <Section>
+      <h1>
+        Historial de menus
+      </h1>
+    </Section>
+    <Section>
+      <Tabla_menu/>
+    </Section>
+    <Section direction = "row" centered>
+      <Button label="Ver menu activo" url="#" />
+      <a>     </a>
+      <Button label="Relizar Pedido" url="#" />
+      <a>     </a>
+    </Section>
+  
     <Footer/>
   </div>
   ); 
 };
 
-export default Invoice_details;
+export default Menu_list;
