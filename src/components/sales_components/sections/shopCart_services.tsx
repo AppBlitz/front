@@ -1,6 +1,7 @@
 import React from "react";
 import Section from "../../generics/section";
-import Button from "../../generics/button_url";
+import Button from "../../generics/button";
+
 
 const Menu_services: React.FC = () => {
   return (

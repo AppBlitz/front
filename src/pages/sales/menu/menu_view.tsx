@@ -1,9 +1,10 @@
-import React, { useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom"; 
-import Navbar from "../../../components/sales_components/navbars/navbar_shopCart"
+import MenuRestaurante from "../../../components/sales_components/menu/menuView";
+import Navbar from "../../../components/sales_components/navbars/navbar_menu"
 import { Footer } from "../../../components/sales_components/footer_sales";
+import React, { useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const ShopCart_details: React.FC = () => {
+const MenuView: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate(); // Inicializamos useNavigate
   const queryParams = new URLSearchParams(location.search);
@@ -18,11 +19,12 @@ const ShopCart_details: React.FC = () => {
     }
   }, [userRole, navigate]);
   return (
-  <div>
-   <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
-    <Footer/>
-  </div>
+    <div>
+      <Navbar userRole={userRole||""} userId={userId||""} token={token||""} />
+        <MenuRestaurante/>
+      <Footer />
+    </div>
   ); 
 };
 
-export default ShopCart_details;
+export default MenuView;
