@@ -8,7 +8,9 @@ interface roleProps{
 }
 const Navbar_home: React.FC <roleProps> = ({userRole, userId, token}) => {
   const tabs = [
-    { label: "Inicio", url: "/sales/home" },
+
+    { label: "Inicio", url: "/home" },
+
     { label: "Realizar pedido", url: "/sales/shop-cart/get" , allowedRoles: ["waiterEmployee", "SalesManager"]   },
     { label: "Ver pedidos", url: "/sales/shop-cart/list" , allowedRoles: ["waiterEmployee", "SalesManager"]  },
     { label: "Menu", url: "/sales/menu" , allowedRoles: ["CashierEmployee", "SalesManager", "KitchenManager", "KitchenEmployee", "waiterEmployee"]  },

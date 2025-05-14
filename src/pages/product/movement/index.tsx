@@ -17,6 +17,7 @@ import {Movements} from "../../../types/movementProduct"
                 data.timestamp = new Date().toISOString();
             }
             registerMovement(productId, data);
+            window.location.reload();
             onClose(); 
     };
   

@@ -104,14 +104,14 @@ function CreateEmployee() {
 
             {/* Botón de envío */}
             <section>
-              <button
+              { <button
                 type="submit"
                 className={`w-full bg-black text-white p-2 rounded ${!stateButton && "opacity-50 cursor-not-allowed"
                   }`}
                 disabled={!stateButton}
               >
                 Registrar
-              </button>
+              </button> }
             </section>
           </form>
         </div>
