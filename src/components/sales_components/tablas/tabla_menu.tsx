@@ -1,10 +1,10 @@
 import React from "react";
 import TableComponent from "../../generics/table"; // Importa el componente de la tabla
-import Button from "../../generics/button_url";
+import Button from "../../generics/button";
 
 const Tabla_menu: React.FC = () => {
   // Define los nombres de las columnas
-  const columnNames = ["ID", "Titulo", "Descripcion","Fecha", "accion"];
+  const columnNames = ["ID","Fecha", "Accion"];
 
   // Define los datos de la tabla
   const data = [
@@ -15,7 +15,7 @@ const Tabla_menu: React.FC = () => {
 
   return (
     <div>
-      <h1>Componente Padre</h1>
+      <h1>Historial de menús</h1>
       <TableComponent columns={columnNames} data={data} />
     </div>
   );

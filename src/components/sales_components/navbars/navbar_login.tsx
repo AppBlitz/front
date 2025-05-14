@@ -7,13 +7,7 @@ const Navbar_login: React.FC = () => {
     
   ];
 
-  return (
-    <Navbar
-      leftLabel="BIENVENIDO"
-      topLabel="Modulo de ventas"
-      tabs={tabs}
-    />
-  );
+  return <Navbar leftLabel="Inicio" topLabel="Módulo de ventas" userRole="" userId="" token="" tabs={tabs} />;
 };
 
 export default Navbar_login;
