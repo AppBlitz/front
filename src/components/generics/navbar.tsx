@@ -22,6 +22,7 @@ const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, 
       return path + GenerateData(role, id, token);
     }
   }
+
   // Asignación de roles en español
   const roleMap: Record<string, string> = {
     KitchenEmployee: "Empleado de cocina",
@@ -29,6 +30,7 @@ const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, 
     WarehouseEmployee: "Bodeguista",
     WaiterEmployee: "Mesero",
     ADMIN:"Administrador"
+
   };
   const role = roleMap[userRole] || "Desconocido"; // Mejora la asignación de roles
 
@@ -49,6 +51,7 @@ const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, 
                   className="navbar-tab"
                   onClick={() => 
                     navigate(xd(tab.url, userRole, userId, token))} 
+
                 >
                   {tab.label}
                 </button>

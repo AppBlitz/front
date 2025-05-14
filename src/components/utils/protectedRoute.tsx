@@ -52,7 +52,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
   // 🔹 Evitar redirección innecesaria si falta algún dato
   if (!token || !userRole || !userId ) {
     console.warn("No se enviaron todos los datos, revisa el login.");
+
     return <Navigate to="/" />;
+
   }
 
   // ⚡️ Verificación del token
@@ -60,7 +62,9 @@ const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ children }) => {
 
   if (!isValidToken) {
     console.warn("Token inválido, revisa si los datos dentro del token coinciden.");
+
     return <Navigate to="/" />;
+
   }
 
   console.log("Token válido, permitiendo acceso.");

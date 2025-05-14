@@ -18,7 +18,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
   
     if (result.success && result.roll) {
       const token = GenerateToken(result.roll, result.id);
+
       navigate('/home'+GenerateData(result.roll, result.id, token));
+
     } else {
       console.warn("Error:", result.message);
     }
