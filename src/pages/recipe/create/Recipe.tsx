@@ -1,11 +1,11 @@
-
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin.tsx";
 import { useState, useEffect } from "react";
 import { instance } from "../../../service/api";
-import { Header } from "../../../components";
 import { useForm, useFieldArray } from "react-hook-form";
 import { saveRecipe } from "./options.ts";
 import { Products } from "../../../types/Product.ts";
 import { createRecipe } from "../../../types/recipe.ts";
+import { useNavigate,useLocation } from "react-router";
 
 function CreateRecipes() {
   const {
@@ -21,6 +21,20 @@ function CreateRecipes() {
   });
 
   const [products, setProducts] = useState<Products[]>([]);
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   // Cargar los productos al cargar el componente
   useEffect(() => {
@@ -44,7 +58,7 @@ function CreateRecipes() {
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
       <div className="bg-gray-300 min-h-screen flex justify-center items-center p-4">
         <div className="bg-white rounded-lg shadow-md p-6 max-w-lg w-full">
           <h1 className="text-black text-2xl font-bold text-center mb-6">Crear Receta</h1>

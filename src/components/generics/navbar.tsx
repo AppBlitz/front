@@ -15,12 +15,20 @@ interface NavbarProps {
 const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, token, tabs }) => {
   const navigate = useNavigate(); // Inicializa el hook de navegación
 
+  const xd  = (path : string, role: string, id: string, token: string): string => {
+    if(path =="/"){
+      return "/"
+    }else{
+      return path + GenerateData(role, id, token);
+    }
+  }
   // Asignación de roles en español
   const roleMap: Record<string, string> = {
     KitchenEmployee: "Empleado de cocina",
     CashierEmployee: "Cajero",
     WarehouseEmployee: "Bodeguista",
     WaiterEmployee: "Mesero",
+    ADMIN:"Administrador"
   };
   const role = roleMap[userRole] || "Desconocido"; // Mejora la asignación de roles
 
@@ -39,7 +47,8 @@ const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, 
               <li key={index}>
                 <button
                   className="navbar-tab"
-                  onClick={() => navigate(tab.url + GenerateData(userRole, userId, token))} 
+                  onClick={() => 
+                    navigate(xd(tab.url, userRole, userId, token))} 
                 >
                   {tab.label}
                 </button>

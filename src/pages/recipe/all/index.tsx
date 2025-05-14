@@ -1,14 +1,30 @@
 
 import { useState, useEffect } from "react";
-import { Header } from "../../../components";
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin";
 import { instance } from "../../../service/api";
 import { createRecipe, Estate, Ingredient } from "../../../types/recipe";
-
+import { useNavigate, useLocation } from "react-router";
+import GenerateData from "../../../service/generateRoute";
 
 function RecipeTable() {
   const [recipes, setRecipes] = useState<createRecipe[]>([])
   const [selectedRecipe, setSelectedRecipe] = useState<createRecipe | null>(null);
   const [editingRecipe, setEditingRecipe] = useState<createRecipe | null>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -79,6 +95,7 @@ function RecipeTable() {
   };
 
   const handleAddRecipe = () => {
+    navigate("/recipes"+ GenerateData(userRole||"", userId||"", token||""))
     console.log("Agregar nueva receta");
   };
 
@@ -87,7 +104,7 @@ function RecipeTable() {
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
       <div className="bg-gray-200 text-black font-serif">
         <div className="flex justify-center items-center h-screen">
           {/* <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6"> */}

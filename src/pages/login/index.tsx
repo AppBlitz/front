@@ -1,9 +1,11 @@
-import { Header } from "../../components"
+
+import Navbar from "../../components/sales_components/navbars/navbar_login";
+
 import { useForm } from "react-hook-form"
 import { loginUser } from "../../types/user";
 import { instance } from "../../service/api";
-import { useNavigate } from "react-router"
-import { useState } from "react";
+import { useLocation,useNavigate } from "react-router"
+import { useState , useEffect } from "react";
 
 function Login() {
 
@@ -11,6 +13,27 @@ function Login() {
   const navigate = useNavigate()
   const [message, setMessage] = useState(" "); // 🔹 Estado para mostrar el mensaje
   const [messageType, setMessageType] = useState<"success" | "error" | " ">(" ");
+
+  const location = useLocation();
+  //const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   const loginConfirmation = async (user : loginUser) => {
     try {
@@ -23,6 +46,7 @@ function Login() {
           window.location.href = "/home";
                 setMessageType("success");
                 setMessage("Inicio de sesión exitoso");
+                
       } else {
         setMessageType("error");
         setMessage(response.data.error ||"Ocurrio un problema")
@@ -36,10 +60,8 @@ function Login() {
     }
   };
 
-  
-
   return (<>
-    <Header />
+  <Navbar/>
 <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-300 via-gray-200 to-gray-100 font-serif">
   <div className="bg-white rounded-2xl shadow-xl p-10 w-full max-w-md">
     <form onSubmit={handleSubmit(loginConfirmation)}>
@@ -101,5 +123,5 @@ function Login() {
 </div>
 
   </>)
-}
+};
 export { Login }

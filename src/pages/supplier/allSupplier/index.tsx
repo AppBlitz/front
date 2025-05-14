@@ -17,8 +17,7 @@ function SupplierTable() {
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        //const response = await instance.get("supplier/all");
-        const response = await instance.get(`http://localhost:8080/supplier/all`)
+        const response = await instance.get("supplier/all");
 
         const data = response.data.map((supplier: Supplier) => ({
           ...supplier,
@@ -102,8 +101,9 @@ function SupplierTable() {
       <Header />
       <div className="bg-gray-200 text-black font-serif">
         <div className="flex justify-center items-center h-screen">
-          <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6">
+          <div className="h-screen overflow-y-auto p-6 bg-white">
             <h2 className="text-lg text-black">Lista de Proveedores</h2>
+            <div className="overflow-y-auto max-h-[400px] border rounded-lg mb-6">
 
             <table className="table-auto w-full mt-6 border-collapse">
               <thead>
@@ -150,6 +150,7 @@ function SupplierTable() {
                 ))}
               </tbody>
             </table>
+            </div>
 
             {selectedSupplier && !editingSupplier && (
               <div className="mt-6 p-4 border bg-gray-100 rounded-lg">

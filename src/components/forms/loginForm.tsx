@@ -1,8 +1,5 @@
-<<<<<<< HEAD
 
-=======
 import React from "react";
->>>>>>> master
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { loginUser } from "../../service/loginSevice";
@@ -21,7 +18,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
   
     if (result.success && result.roll) {
       const token = GenerateToken(result.roll, result.id);
-      navigate('/sales/home'+GenerateData(result.roll, result.id, token));
+      navigate('/home'+GenerateData(result.roll, result.id, token));
     } else {
       console.warn("Error:", result.message);
     }

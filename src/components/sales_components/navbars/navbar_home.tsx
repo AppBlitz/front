@@ -13,6 +13,7 @@ const Navbar_home: React.FC<roleProps> = ({userRole, userId, token}) => {
     { label: "Pedidos", url: "/sales/shop-cart/list", allowedRoles: ["waiterEmployee", "SalesManager"]  },
     { label: "Cerrar sesión", url: "/"},
   ];
+  
   return <Navbar leftLabel="Inicio" topLabel="Módulo de ventas" userRole={userRole} userId={userId} token={token} tabs={tabs} />;
 };
 

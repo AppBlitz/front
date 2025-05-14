@@ -15,7 +15,7 @@ const Home_sales: React.FC = () => {
   // Redirigir si no hay role
   useEffect(() => {
     if (!userRole||userRole=="") {
-      navigate("/sale/login"); // Redirige a la página de login
+      navigate("/"); // Redirige a la página de login
     }
   }, [userRole, navigate]);
 
