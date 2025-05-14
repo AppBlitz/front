@@ -13,17 +13,17 @@ const Test: React.FC = () => {
 
 
   return (
-  <div>
-    <Navbar
-      leftLabel="Mi Título"
-      topLabel="Etiqueta Superior"
-      tabs={tabs}
-    />
-    <MonthManagement />
-    
-    <UpdateTypeManagement/>
-  </div>
-  ); 
+    <div>
+      <Navbar
+        leftLabel="Mi Título"
+        topLabel="Etiqueta Superior"
+        tabs={tabs}
+      />
+      <MonthManagement />
+
+      <UpdateTypeManagement />
+    </div>
+  );
 };
 
 export default Test;

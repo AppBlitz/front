@@ -1,5 +1,4 @@
 import { createBrowserRouter } from "react-router";
-import App from "../App";
 import Test from "../pages/test/Test";
 import Payroll from "../pages/payroll/payroll/index"
 import Pay from "../pages/payroll/pay/index"
@@ -52,7 +51,6 @@ export const router = createBrowserRouter([
     path: "productmanager", Component: ProductHistory
   },
 
-  //rutas nomina
   {
     path: "payrolls", Component: Payrolls
   },
@@ -71,7 +69,7 @@ export const router = createBrowserRouter([
   // Agregando rutas desde Routes_tests
   ...testsRoutes,
 
-    // Agregando rutas desde Routes_general
-    ...generalRoutes,
+  // Agregando rutas desde Routes_general
+  ...generalRoutes,
 
 ]);

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { useForm } from "react-hook-form";
 import { loginUser } from "../../service/loginSevice";
 import ActionButton from "../generics/button_action";
@@ -22,6 +22,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
       <div className="pt-10">
         <label className="text-black block text-center">Correo electrónico</label>
         <input
+          id="email"
           type="text"
           className="w-70 h-10 border border-black rounded-full text-black text-center"
           placeholder="Email"
@@ -35,6 +36,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
       <div className="pt-10">
         <label className="text-black block text-center">Contraseña</label>
         <input
+          id="password"
           type="password"
           className="border border-black rounded-full w-70 h-10 text-black text-center"
           placeholder="Password"
@@ -43,7 +45,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
       </div>
 
       <div className="flex justify-center pt-6">
-      <ActionButton label="Ingresar" onClickAction={handleSubmit(onSubmit)}/>
+        <ActionButton label="Ingresar" onClickAction={handleSubmit(onSubmit)} />
       </div>
     </form>
   );
