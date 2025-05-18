@@ -2,11 +2,13 @@
 import { instance } from "../../../service/api";
 import { registerSuppliers } from "../../../types/supplier";
 
-function registerSupplierss(supplier: registerSuppliers): void {
-  let state: string = "IDLE";
+function registerSupplierss(supplier: registerSuppliers,
+  setMessage: React.Dispatch<React.SetStateAction<string>>,
+  setMessageType: React.Dispatch<React.SetStateAction<"success" | "error" | " ">>): void {
+  let state: string = "INACTIVE";
 
   if (supplier.stateActivity === "Activo") {
-    state = "ASSET";
+    state = "ACTIVE";
   }
 
   const offeredProducts = supplier.offeredProducts
@@ -22,10 +24,18 @@ function registerSupplierss(supplier: registerSuppliers): void {
   })
     .then(response => {
       console.log("Supplier registered successfully:", response.data);
+      setMessage("Proveedor registrado con éxito");
+      setMessageType("success");
+
     })
     .catch(error => {
       console.error("Error registering supplier:", error);
+      setMessage("Error al registrar el proveedor");
+      setMessageType("error");
+
     });
+
+    
 }
 
 export { registerSupplierss };

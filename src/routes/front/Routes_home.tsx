@@ -1,13 +1,14 @@
 import { ProductHistory,CreateEmployee
     ,ProductCards, CreateRecipes
     ,SupplierTable, 
-    RecipeTable} from "../../pages";
+    RecipeTable,
+    RegisterSupplier} from "../../pages";
 import Home_sales from "../../pages/sales/home";
 import ProtectedRoute from "../../components/utils/protectedRoute";
 
 export const Routes_home = [
   {
-    path: "/home",
+    path: "/productsAdmin",
     Component: () => (
       <ProtectedRoute>
         <ProductHistory/>
@@ -55,13 +56,21 @@ export const Routes_home = [
     ),
   },
   {
-    path: "/sales/home",
+    path: "/home",
     Component: () => (
       <ProtectedRoute>
         <Home_sales/>
       </ProtectedRoute>
     ),
   },
+   {
+     path: "/register/supplier",
+     Component: () =>(
+      <ProtectedRoute>
+        <RegisterSupplier/>
+      </ProtectedRoute>
+    ),
+   },
 ]
 
   
