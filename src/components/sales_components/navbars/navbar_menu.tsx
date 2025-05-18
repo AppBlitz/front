@@ -11,11 +11,11 @@ const Navbar_home: React.FC <roleProps> = ({userRole, userId, token}) => {
 
     { label: "Inicio", url: "/home" },
 
-    { label: "Realizar pedido", url: "/sales/shop-cart/get" , allowedRoles: ["waiterEmployee", "SalesManager"]   },
-    { label: "Ver pedidos", url: "/sales/shop-cart/list" , allowedRoles: ["waiterEmployee", "SalesManager"]  },
-    { label: "Menu", url: "/sales/menu" , allowedRoles: ["CashierEmployee", "SalesManager", "KitchenManager", "KitchenEmployee", "waiterEmployee"]  },
-    { label: "Menu detalle", url: "/sales/menu/details", allowedRoles: ["SalesManager", "KitchenManager", "KitchenEmployee", "waiterEmployee"]   },
-    { label: "Ver menu", url: "/sales/menu/view" , allowedRoles: ["KitchenManager", "KitchenEmployee" ]  },
+    { label: "Realizar pedido", url: "/sales/shop-cart/get" , allowedRoles: ["ADMIN","waiterEmployee", "SalesManager"]   },
+    { label: "Ver pedidos", url: "/sales/shop-cart/list" , allowedRoles: ["ADMIN","waiterEmployee", "SalesManager"]  },
+    { label: "Menu", url: "/sales/menu" , allowedRoles: ["ADMIN","CashierEmployee", "SalesManager", "KitchenManager", "KitchenEmployee", "waiterEmployee"]  },
+    { label: "Menu detalle", url: "/sales/menu/details", allowedRoles: ["ADMIN","SalesManager", "KitchenManager", "KitchenEmployee", "waiterEmployee"]   },
+    { label: "Ver menu", url: "/sales/menu/view" , allowedRoles: ["ADMIN","KitchenManager", "KitchenEmployee" ]  },
     
     
   ];

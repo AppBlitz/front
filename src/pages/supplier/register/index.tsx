@@ -1,19 +1,42 @@
 
-import { Header } from "../../../components";
-import { useForm } from "react-hook-form";
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin";
+import { useForm, Controller } from "react-hook-form";
 import { registerSuppliers } from "../../../types/supplier";
 import { registerSupplierss } from "./options";
+import { useLocation, useNavigate } from "react-router";
+import { useState, useEffect } from "react";
+import ProductSelector from "../allSupplier/productSelector";
+import { messageValidation } from "../../../components/button/messageValidation/message";
 
 function RegisterSupplier() {
-  const { register, handleSubmit } = useForm<registerSuppliers>();
+  const { register, handleSubmit , control} = useForm<registerSuppliers>();
+
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+  const [message, setMessage] = useState(" "); // 🔹 Estado para mostrar el mensaje
+  const [messageType, setMessageType] = useState<"success" | "error" | " ">(" ");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
       <div className="bg-gray-200 text-black font-serif min-h-screen flex items-center justify-center">
         <div className="bg-white rounded-xl w-full max-w-lg p-6 shadow-lg">
           <h1 className="text-2xl font-bold mb-6 text-center">Registro Proveedor</h1>
-          <form onSubmit={handleSubmit(registerSupplierss)} className="space-y-6">
+          <form onSubmit={handleSubmit((data) => registerSupplierss(data, setMessage, setMessageType)
+            )} className="space-y-6">
             <div>
               <label className="block text-sm font-medium mb-1">Nombre</label>
               <input
@@ -40,14 +63,18 @@ function RegisterSupplier() {
                 {...register("orderDate", { required: true })}
               />
             </div>
-
-            {/* Productos ofrecidos */}
             <div>
               <label className="block text-sm font-medium mb-1">Productos Ofrecidos</label>
-              <textarea
-                className="w-full h-24 text-black border border-gray-300 rounded-xl pl-3 pt-2 resize-none focus:outline-none focus:ring-2 focus:ring-blue-500"
-                placeholder="Lista de productos"
-                {...register("offeredProducts", { required: true })}
+              <Controller
+                name="offeredProducts"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <ProductSelector
+                    selectedProductIds={field.value || []}
+                    onChange={field.onChange}
+                  />
+                )}
               />
             </div>
 
@@ -72,6 +99,7 @@ function RegisterSupplier() {
               >
                 Registrar
               </button>
+              {messageValidation(messageType,message)}
             </div>
           </form>
         </div>

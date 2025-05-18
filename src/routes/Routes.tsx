@@ -26,9 +26,7 @@ export const router = createBrowserRouter([
   {
     path: "register", Component: Register
   },
-  {
-    path: "register/supplier", Component: RegisterSupplier
-  },
+
   {
     path: "update/supplier", Component: UpdateSupplier
   },
