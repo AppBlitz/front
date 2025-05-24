@@ -8,6 +8,7 @@ interface roleProps{
 }
 const Navbar_home: React.FC<roleProps> = ({userRole, userId, token}) => {
   const tabs = [
+
     { label: "home", url: "/home", allowedRoles: ["ADMIN","CashierEmployee"]  },
     { label: "empleados", url: "/employee", allowedRoles: ["ADMIN"] },
     //{ label: "crear proveedores", url: "/register/supplier", allowedRoles: ["ADMIN"] },

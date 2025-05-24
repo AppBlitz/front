@@ -30,7 +30,6 @@ const Navbar: React.FC<NavbarProps> = ({ leftLabel, topLabel, userRole, userId, 
     WarehouseEmployee: "Bodeguista",
     WaiterEmployee: "Mesero",
     ADMIN:"Administrador"
-
   };
   const role = roleMap[userRole] || "Desconocido"; // Mejora la asignación de roles
 
