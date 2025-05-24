@@ -1,3 +1,4 @@
+
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
@@ -17,7 +18,9 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
   
     if (result.success && result.roll) {
       const token = GenerateToken(result.roll, result.id);
-      navigate('/sales/home'+GenerateData(result.roll, result.id, token));
+
+      navigate('/home'+GenerateData(result.roll, result.id, token));
+
     } else {
       console.warn("Error:", result.message);
     }
@@ -33,6 +36,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
       <div className="pt-10">
         <label className="text-black block text-center">Correo electrónico</label>
         <input
+          id="email"
           type="text"
           className="w-70 h-10 border border-black rounded-full text-black text-center"
           placeholder="Email"
@@ -46,6 +50,7 @@ export const LoginForm: React.FC<LoginFormProps> = ({ onLoginMessage }) => {
       <div className="pt-10">
         <label className="text-black block text-center">Contraseña</label>
         <input
+          id="password"
           type="password"
           className="border border-black rounded-full w-70 h-10 text-black text-center"
           placeholder="Password"

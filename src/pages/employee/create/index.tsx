@@ -1,7 +1,7 @@
-
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin";
 import { useForm } from "react-hook-form";
 import { useState, useEffect } from "react";
-import { DropdownMenu, Header } from "../../../components";
+import { DropdownMenu } from "../../../components";
 import { saveEmployee } from "./options";
 import {
   AREA,
@@ -15,11 +15,27 @@ import {
   RollEmployee,
   Objeto
 } from "../../../types/employee";
+import { useLocation, useNavigate } from "react-router";
 
 function CreateEmployee() {
   const { register, handleSubmit, setValue, watch } = useForm<EmployeeCreate>();
   const [stateButton, setStateButton] = useState<boolean>(false);
   const formValues = watch();
+
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   const handleDropdownSelect = (field: keyof EmployeeCreate, value: string | boolean) => {
     setValue(field, value);
@@ -34,7 +50,8 @@ function CreateEmployee() {
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
+
       <div className="bg-gray-200 min-h-screen flex items-center justify-center">
         <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
           <form onSubmit={handleSubmit(saveEmployee)}>
@@ -104,14 +121,14 @@ function CreateEmployee() {
 
             {/* Botón de envío */}
             <section>
-              <button
+              { <button
                 type="submit"
                 className={`w-full bg-black text-white p-2 rounded ${!stateButton && "opacity-50 cursor-not-allowed"
                   }`}
                 disabled={!stateButton}
               >
                 Registrar
-              </button>
+              </button> }
             </section>
           </form>
         </div>

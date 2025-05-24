@@ -1,12 +1,28 @@
-import { Header } from "../../../components";
+
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin";
 import { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router";
 import { Products } from "../../../types/Product";
 import { MovementForm } from "../movement/index";
-//import { Movements } from "../../../types/movementProduct";
-// import { Movementsconsult } from "../../../types/movementProduct";
 import { instance } from "../../../service/api";
 
 function ProductCards() {
+
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
+
   const [products, setProducts] = useState<Products[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
 
@@ -54,7 +70,7 @@ function ProductCards() {
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
       <div className="bg-gray-200 text-black font-serif min-h-screen flex flex-col items-center p-6">
         <h1 className="text-2xl font-bold mb-6 text-center">Lista de Productos</h1>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">

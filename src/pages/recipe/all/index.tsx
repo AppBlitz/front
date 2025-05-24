@@ -1,14 +1,30 @@
 
 import { useState, useEffect } from "react";
-import { Header } from "../../../components";
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin";
 import { instance } from "../../../service/api";
 import { createRecipe, Estate, Ingredient } from "../../../types/recipe";
-
+import { useNavigate, useLocation } from "react-router";
+import GenerateData from "../../../service/generateRoute";
 
 function RecipeTable() {
   const [recipes, setRecipes] = useState<createRecipe[]>([])
   const [selectedRecipe, setSelectedRecipe] = useState<createRecipe | null>(null);
   const [editingRecipe, setEditingRecipe] = useState<createRecipe | null>(null);
+
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   useEffect(() => {
     const fetchRecipes = async () => {
@@ -79,6 +95,7 @@ function RecipeTable() {
   };
 
   const handleAddRecipe = () => {
+    navigate("/recipes"+ GenerateData(userRole||"", userId||"", token||""))
     console.log("Agregar nueva receta");
   };
 
@@ -87,13 +104,14 @@ function RecipeTable() {
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
       <div className="bg-gray-200 text-black font-serif">
         <div className="flex justify-center items-center h-screen">
-          <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6">
+          {/* <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6"> */}
+          <div className="h-screen overflow-y-auto p-6 bg-white">
             <h2 className="text-lg text-black">Lista de Recetas</h2>
-
-            <table className="table-auto w-full mt-6 border-collapse">
+            <div className="overflow-y-auto max-h-[400px] border rounded-lg mb-6">
+            <table className="table-auto w-full border-collapse">
               <thead>
                 <tr className="bg-gray-300">
                   <th className="border px-4 py-2 text-left">Nombre</th>
@@ -138,6 +156,7 @@ function RecipeTable() {
                 ))}
               </tbody>
             </table>
+            </div>
 
             {selectedRecipe && !editingRecipe && (
               <div className="mt-6 p-4 border bg-gray-100 rounded-lg">

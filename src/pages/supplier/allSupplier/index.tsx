@@ -1,8 +1,13 @@
 
 import { useState, useEffect } from "react";
-import { Header } from "../../../components";
+import Navbar from "../../../components/sales_components/navbars/navbar_home_admin";
 import { Supplier } from "../../../types/supplier";
 import { instance } from "../../../service/api";
+import { useLocation, useNavigate } from "react-router";
+import GenerateData from "../../../service/generateRoute";
+import { messageValidation } from "../../../components/button/messageValidation/message"; 
+import ProductSelector from "./productSelector";
+import { Products } from "../../../types/Product";
 
 const formatDate = (date: string | Date): string => {
   const parsedDate = typeof date === "string" ? new Date(date) : date;
@@ -13,20 +18,55 @@ function SupplierTable() {
   const [suppliers, setSuppliers] = useState<Supplier[]>([]);
   const [selectedSupplier, setSelectedSupplier] = useState<Supplier | null>(null);
   const [editingSupplier, setEditingSupplier] = useState<Supplier | null>(null);
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+  const token = queryParams.get("token");
+  const userId = queryParams.get("id");
+
+  const [message, setMessage] = useState(" "); // 🔹 Estado para mostrar el mensaje
+  const [messageType, setMessageType] = useState<"success" | "error" | " ">(" ");
+  
+  const [allProducts, setAllProducts] = useState<Products[]>([]);
+
+useEffect(() => {
+  const fetchProducts = async () => {
+    try {
+      const res = await instance.get<Products[]>("/product/allProducts");
+      setAllProducts(res.data);
+    } catch (error) {
+      console.error("Error al cargar productos:", error);
+    }
+  };
+
+  fetchProducts();
+}, []);
+
+    // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+
 
   useEffect(() => {
     const fetchSuppliers = async () => {
       try {
-        //const response = await instance.get("supplier/all");
-        const response = await instance.get(`http://localhost:8080/supplier/all`)
+        const response = await instance.get("supplier/all");
 
         const data = response.data.map((supplier: Supplier) => ({
           ...supplier,
           orderDate: new Date(supplier.orderDate),
         }));
         setSuppliers(data);
+      setMessageType("success")
+      setMessage("proveedores cargados")
       } catch (error) {
         console.error("Error al cargar proveedores:", error);
+        setMessageType("error")
+        setMessage("Error al cargar proveedores:")
       }
     };
 
@@ -47,10 +87,10 @@ function SupplierTable() {
     try {
       let state: string = "";
       if (updatedSupplier.stateActivity === "INACTIVO") {
-        state = "INACTIVO";
+        state = "INACTIVE";
       }
       else {
-        state = "ACTIVO"
+        state = "ACTIVE"
       }
       await instance.put("supplier/edit", {
         id: updatedSupplier.id,
@@ -67,9 +107,14 @@ function SupplierTable() {
         )
       );
       console.log("Proveedor actualizado:", updatedSupplier);
+      window.location.reload
+      setMessageType("success")
+      setMessage("proveedor actualizado")
       setEditingSupplier(null);
     } catch (error) {
       console.error("Error al actualizar proveedor:", error);
+      setMessageType("error")
+      setMessage("Error al actualizar proveedor")
     }
   };
 
@@ -78,10 +123,15 @@ function SupplierTable() {
       await instance.delete("supplier/delete/" + id);
       setSuppliers((prevSuppliers) =>
         prevSuppliers.filter((supplier) => supplier.id !== id)
+        
       );
       console.log("Proveedor eliminado:", id);
+      setMessageType("success")
+      setMessage("proveedor eliminado")
     } catch (error) {
       console.error("Error al eliminar proveedor:", error);
+      setMessageType("error")
+      setMessage("error al eliminar proveedor")
     }
   };
   function verificationState() {
@@ -94,16 +144,19 @@ function SupplierTable() {
     }
   }
   const handleAddSupplier = () => {
+    navigate("/register/supplier"+ GenerateData(userRole||"", userId||"", token||""))
     console.log("Agregar nuevo proveedor");
   };
 
   return (
     <>
-      <Header />
+      <Navbar userRole= {userRole||""} userId={userId||""} token={token||""}/>
+
       <div className="bg-gray-200 text-black font-serif">
         <div className="flex justify-center items-center h-screen">
-          <div className="bg-white rounded-xl w-full md:w-3/4 lg:w-2/3 p-6">
+          <div className="h-screen overflow-y-auto p-6 bg-white">
             <h2 className="text-lg text-black">Lista de Proveedores</h2>
+            <div className="overflow-y-auto max-h-[400px] border rounded-lg mb-6">
 
             <table className="table-auto w-full mt-6 border-collapse">
               <thead>
@@ -145,19 +198,29 @@ function SupplierTable() {
                       >
                         Eliminar
                       </button>
+                      
                     </td>
                   </tr>
                 ))}
               </tbody>
             </table>
-
+            </div>
+            {messageValidation(messageType,message)}
             {selectedSupplier && !editingSupplier && (
               <div className="mt-6 p-4 border bg-gray-100 rounded-lg">
                 <h3 className="text-lg text-black">Detalles del Proveedor</h3>
                 <p><strong>Nombre:</strong> {selectedSupplier.nameSupplier}</p>
                 <p><strong>Ubicación:</strong> {selectedSupplier.location}</p>
                 <p><strong>Fecha de Pedido:</strong> {formatDate(selectedSupplier.orderDate)}</p>
-                <p><strong>Productos Ofrecidos:</strong> {selectedSupplier.offeredProducts.join(", ")}</p>
+                <p>
+                  <strong>Productos Ofrecidos:</strong>{" "}
+                  {selectedSupplier.offeredProducts
+                    .map((productId) => {
+                      const product = allProducts.find((p) => p.id === productId);
+                      return product ? product.nameProduct : "Desconocido";
+                    })
+                    .join(", ")}
+                </p>
                 <p><strong>Estado:</strong>{verificationState()} </p>
               </div>
             )}
@@ -203,19 +266,13 @@ function SupplierTable() {
                     }
                     className="border rounded px-4 py-2 w-full"
                   />
-
                   <label className="block mt-4">Productos Ofrecidos:</label>
-                  <input
-                    type="text"
-                    value={editingSupplier.offeredProducts.join(", ")}
-                    onChange={(e) =>
-                      setEditingSupplier({
-                        ...editingSupplier,
-                        offeredProducts: e.target.value.split(","),
-                      })
-                    }
-                    className="border rounded px-4 py-2 w-full"
-                  />
+                    <ProductSelector
+                      selectedProductIds={editingSupplier.offeredProducts}
+                      onChange={(selected) =>
+                        setEditingSupplier({ ...editingSupplier, offeredProducts: selected })
+                      }
+                    />
 
                   <label className="block mt-4">Estado:</label>
                   <select
@@ -246,6 +303,7 @@ function SupplierTable() {
                     >
                       Guardar
                     </button>
+                    {messageValidation(messageType,message)}
                   </div>
                 </form>
               </div>
@@ -258,6 +316,7 @@ function SupplierTable() {
               >
                 Agregar Proveedor
               </button>
+              
             </div>
           </div>
         </div>
