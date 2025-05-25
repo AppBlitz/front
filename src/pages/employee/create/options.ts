@@ -22,14 +22,7 @@ async function saveEmployee(employee: EmployeeCreate) {
       baseSalary: salary,
       roll: employee.roll,
       email: employee.email,
-      password: employee.password,
-      eps: employee.eps,
-      arl: employee.arl,
-      ccf: employee.ccf,
-      riskLevel: employee.riskLevel,
-      cesantias: employee.cesantias,
-      pension: employee.pension,
-      area: employee.area
+      password: employee.password
     });
 
     console.log("Empleado guardado correctamente.");
