@@ -11,8 +11,7 @@ const About: React.FC = () => {
       <Navbar
         leftLabel="Sobre nosotros"
         topLabel="Ilios"
-        tabs={tabs}
-      />
+        tabs={tabs} userId={""} token={""} userRole={""} />
       <div style={{ padding: "2rem", fontFamily: "Arial, sans-serif" }}>
         <h1>Sobre Nosotros</h1>
         <p>
@@ -25,7 +24,7 @@ const About: React.FC = () => {
           Si deseas saber más sobre nuestra historia, valores o servicios, no dudes en contactarnos. ¡Gracias por confiar en nosotros!
         </p>
       </div>
-      <Footer/>
+      <Footer />
     </>
   );
 };

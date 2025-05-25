@@ -6,21 +6,21 @@ import Update from "../pages/payroll/update/index"
 import Payrolls from "../pages/payroll/index"
 import { salesRoutes } from "./front/Routes_sales";
 import { testsRoutes } from "./front/Routes_tests";
-import { Register, RegisterSupplier, UpdateSupplier } from "../pages";
+import { Register, UpdateSupplier } from "../pages";
 import { generalRoutes } from "./front/Routes_general";
 import { loginRoute } from "./front/Route_login";
 import { Routes_home } from "./front/Routes_home";
 
 
 export const router = createBrowserRouter([
-  
+
   {
     path: "test", Component: Test
   },
 
   // Agregando rutas desde Route_login
   ...loginRoute,
-  
+
   ...Routes_home,
 
   {

@@ -3,10 +3,10 @@ import Form from "../../generics/form";
 import SeeAllPayrolls from "../buttons/seeAllPayrolls"; // Ejemplo de botón adicional
 
 interface FormData {
-    name: string;
-    email: string;
-    age: number;
-  }
+  name: string;
+  email: string;
+  age: number;
+}
 
 const TestFormWithComponents: React.FC = () => {
   const handleFormSubmit = (data: FormData) => {
@@ -23,7 +23,7 @@ const TestFormWithComponents: React.FC = () => {
     <div>
       <h1>Formulario con Componentes Adicionales</h1>
       <Form fields={fields} onSubmit={handleFormSubmit}>
-        <SeeAllPayrolls/> 
+        <SeeAllPayrolls />
         <p style={{ marginTop: "10px", fontStyle: "italic", color: "gray" }}>
           Todos los campos son obligatorios.
         </p>

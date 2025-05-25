@@ -20,7 +20,7 @@ const MonthManagement: React.FC = () => {
 
   // Logic to handle the selection of a month
   const handleSelect = (month: string) => {
-    //alert(`You have selected the month of ${month}.`);
+    console.log(month);
   };
 
   return (

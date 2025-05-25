@@ -17,8 +17,7 @@ const Test: React.FC = () => {
       <Navbar
         leftLabel="Mi Título"
         topLabel="Etiqueta Superior"
-        tabs={tabs}
-      />
+        tabs={tabs} userId={""} token={""} userRole={""} />
       <MonthManagement />
 
       <UpdateTypeManagement />
