@@ -1,15 +1,15 @@
 import React from "react";
 import "./css/form.css";
 
-interface FormField<T> {
-  label: string;
-  name: string;
-  type: "text" | "number" | "email" | "password" | "date";
+interface FormField {
+  label?: string;
+  name?: string;
+  type?: string
   placeholder?: string;
 }
 
 interface FormProps<T> {
-  fields: FormField<T>[];
+  fields: FormField[];
   onSubmit: (data: T) => void;
   children?: React.ReactNode; // Para componentes adicionales
 }

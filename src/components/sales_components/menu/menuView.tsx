@@ -1,55 +1,66 @@
-import React from "react";
-import "../css/menu.css"; // Importar el archivo de estilos
-interface ItemMenu {
-    id: number;
-    nombre: string;
-    descripcion: string;
-    precio: number;
-    ingredientes: string[];
-  }
-  
-  interface CategoriaMenu {
-    categoria: string;
-    items: ItemMenu[];
-  }
-  const menu: CategoriaMenu[] = [
-    {
-      categoria: "Bebidas",
-      items: [
-        { id: 1, nombre: "Café", descripcion: "Café colombiano recién hecho", precio: 5000, ingredientes: ["Café", "Agua"] },
-        { id: 2, nombre: "Jugo de naranja", descripcion: "Natural y sin azúcar", precio: 7000, ingredientes: ["Naranja"] },
-      ],
-    },
-    {
-      categoria: "Almuerzo",
-      items: [
-        { id: 3, nombre: "Bandeja paisa", descripcion: "Plato típico con frijoles, arroz y chicharrón", precio: 25000, ingredientes: ["Frijoles", "Arroz", "Chicharrón", "Huevo", "Plátano"] },
-        { id: 4, nombre: "Sancocho", descripcion: "Sopa tradicional con carne y verduras", precio: 20000, ingredientes: ["Yuca", "Papa", "Carne", "Cilantro", "Maíz"] },
-      ],
-    },
-  ];
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom"; 
+import { useParams } from "react-router-dom";
+import "../css/menu.css";
+import Routes_api_java from "../../../routes/Routes_apis_java";
 
-  
-  const MenuRestaurante: React.FC = () => {
-    return (
-      <div className="menu-container">
-        <h1>Menú del Restaurante</h1>
-        {menu.map((categoria) => (
-          <div key={categoria.categoria} className="categoria">
-            <h2>{categoria.categoria}</h2>
-            <ul className="lista-items">
-              {categoria.items.map((item) => (
-                <li key={item.id}>
-                  <strong>{item.nombre}</strong> - {item.descripcion} (${item.precio})  
-                  <br />
-                  <strong>Ingredientes:</strong> {item.ingredientes.join(", ")}
-                </li>
-              ))}
-            </ul>
-          </div>
-        ))}
+interface ItemMenu {
+  recipe: string | null;
+  product: string | null;
+  categoriItem: string;
+}
+
+interface CategoriaMenu {
+  id: string;
+  name: string;
+  description: string;
+  date: string;
+  items: ItemMenu[];
+}
+
+const MenuRestaurante: React.FC = () => {
+  const location = useLocation();
+  const navigate = useNavigate(); // Inicializamos useNavigate
+  const queryParams = new URLSearchParams(location.search);
+  const userRole = queryParams.get("role");
+
+
+  // Redirigir si no hay role
+  useEffect(() => {
+    if (!userRole||userRole=="") {
+      navigate("/sale/login"); // Redirige a la página de login
+    }
+  }, [userRole, navigate]);
+  const { id_menu } = useParams(); // Obtener el parámetro desde la URL
+  const [menuData, setMenuData] = useState<CategoriaMenu | null>(null);
+
+  useEffect(() => {
+    if (!id_menu) return; // Asegurar que el menuId está disponible
+
+    fetch(Routes_api_java.url_base+Routes_api_java.get_menu+id_menu) // Reemplaza con la URL correcta de la API
+      .then(response => response.json())
+      .then(data => setMenuData(data))
+      .catch(error => console.error("Error al obtener el menú:", error));
+  }, [id_menu]);
+
+  if (!menuData) return <p>No menú...</p>;
+
+  return (
+    <div className="menu-container">
+      <h1>Menú del Restaurante</h1>
+      <div className="categoria">
+        <h2>{menuData.name} - {menuData.date}</h2>
+        <p><strong>Descripción:</strong> {menuData.description}</p>
+        <ul className="lista-items">
+          {menuData.items.map((item, index) => (
+            <li key={index}>
+              <strong>{item.product ?? item.recipe ?? "Sin nombre"}</strong> - Categoría: {item.categoriItem}
+            </li>
+          ))}
+        </ul>
       </div>
-    );
-  };
-  
-  export default MenuRestaurante;
+    </div>
+  );
+};
+
+export default MenuRestaurante;

@@ -1,4 +1,4 @@
-import OrdersManagement from "../../../components/sales_components/menu/orderManagement"; 
+import OrdersManagement from "../../../components/sales_components/menu/menuDetails"; 
 import Navbar from "../../../components/sales_components/navbars/navbar_menu"
 import { Footer } from "../../../components/sales_components/footer_sales";
 import React, { useEffect } from "react";

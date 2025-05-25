@@ -4,27 +4,27 @@ import Combobox from "../../generics/combobox";
 const UpdateTypeManagement: React.FC = () => {
   // List of months
   const updateTypes = [
-  "BONOS_Y_COMISIONES",
-  "HORAS_EXTRAS_DIURNAS",
-  "HORAS_EXTRAS_NOCTURNAS",
-  "HORAS_EXTRAS_DOMINICALES",
-  "HORAS_EXTRASNOCTURNAS_DOMINICALES",
-  "DEDUCCIONES",
-  "DIA_SIN_REMUNERACION",
-  "VACACIONES",
-  "INCAPACIDAD",
-  "AUXILIO_DE_TRANSPORTE",
-  "PRIMA",
-  "CESANTIAS",
-  "ARL",
-  "EPS",
-  "PENSION",
-  "CCF"
-];
+    "BONOS_Y_COMISIONES",
+    "HORAS_EXTRAS_DIURNAS",
+    "HORAS_EXTRAS_NOCTURNAS",
+    "HORAS_EXTRAS_DOMINICALES",
+    "HORAS_EXTRASNOCTURNAS_DOMINICALES",
+    "DEDUCCIONES",
+    "DIA_SIN_REMUNERACION",
+    "VACACIONES",
+    "INCAPACIDAD",
+    "AUXILIO_DE_TRANSPORTE",
+    "PRIMA",
+    "CESANTIAS",
+    "ARL",
+    "EPS",
+    "PENSION",
+    "CCF"
+  ];
 
   // Logic to handle the selection of a month
   const handleSelect = (updateTypes: string) => {
-    //alert(`seleccionaste ${updateTypes}.`);
+    console.log(updateTypes)
   };
 
   return (
