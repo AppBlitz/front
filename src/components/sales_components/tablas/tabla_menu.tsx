@@ -1,17 +1,48 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import TableComponent from "../../generics/table"; // Importa el componente de la tabla
 import Button from "../../generics/button";
+import Routes_api_java from "../../../routes/Routes_apis_java";
+import { useLocation} from "react-router-dom"; 
+import GenerateData from "../../../service/generateRoute";
+interface MenuData {
+  id: string;
+  name: string;
+  items: {
+    recipe: string | null;
+    product: string | null;
+    categoriItem: string;
+  }[];
+  description: string;
+  date: string;
+}
 
 const Tabla_menu: React.FC = () => {
-  // Define los nombres de las columnas
-  const columnNames = ["ID","Fecha", "Accion"];
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const userRole = queryParams.get("role");
+    const token = queryParams.get("token");
+    const userId = queryParams.get("id");
+  
+  const [menus, setMenus] = useState<MenuData[]>([]);
+  
+  useEffect(() => {
+    fetch(Routes_api_java.url_base + Routes_api_java.get_all_menu)
+      .then(response => response.json())
+      .then(data => setMenus(data)) // Guardar los datos en el estado
+      .catch(error => console.error("Error al obtener los menús:", error));
+  }, []);
 
-  // Define los datos de la tabla
-  const data = [
-    { id: 1, titulo: "Arroz paisa", descripcion: "esta es una descripcion corta", fecha:"11/04/2025", accion: <Button label="Ver" url="#" />},
-    { id: 2, titulo: "Arroz chino", descripcion: "esta es una descripcion mediana", fecha:"15/04/2025", accion: <Button label="Ver" url="#" /> },
-    { id: 3, titulo: "Bandeja paisa", descripcion: "esta es una descripcion larga", fecha:"10/03/2025", accion: <Button label="Ver" url="#" /> },
-  ];
+  // Define los nombres de las columnas
+  const columnNames = ["ID","Nombre","Fecha","Descripcion", "Accion"];
+
+  // Generar los datos de la tabla a partir del JSON recibido
+  const data = menus.map(menu => ({
+    id: menu.id,
+    nombre: menu.name,
+    fecha: menu.date,
+    descripcion: menu.description,
+    accion: <Button label="Ver" url={"/sales/menu/view"+GenerateData(userRole||"", userId||"", token||"")+"&id_menu="+menu.id} />
+  }));
 
   return (
     <div>
