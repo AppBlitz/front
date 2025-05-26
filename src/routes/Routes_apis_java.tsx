@@ -9,7 +9,9 @@ const Routes_api_java: Record<string, string> = {
     "obtener_recetas":"/api/recipes/all",
     "guardar_menu":"/api/menus/createMenu",
     "get_menu":"/api/menus/",
-    "get_all_menu":"/api/menus/getAllMenu"
+    "get_all_menu":"/api/menus/getAllMenu",
+    "obtener_pedidos":"/cart/getAll",
+    "obtener_pedido" : "/cart/search/"
 };
 
 export default Routes_api_java;
