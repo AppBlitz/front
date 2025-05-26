@@ -5,6 +5,8 @@ import { instance } from "../../../service/api";
 import { createRecipe, Estate, Ingredient } from "../../../types/recipe";
 import { useNavigate, useLocation } from "react-router";
 import GenerateData from "../../../service/generateRoute";
+import { messageValidation } from "../../../components/button/messageValidation/message"; 
+import { Products } from "../../../types/Product";
 
 function RecipeTable() {
   const [recipes, setRecipes] = useState<createRecipe[]>([])
@@ -17,6 +19,9 @@ function RecipeTable() {
   const userRole = queryParams.get("role");
   const token = queryParams.get("token");
   const userId = queryParams.get("id");
+  
+  const [message, setMessage] = useState(" "); // 🔹 Estado para mostrar el mensaje
+  const [messageType, setMessageType] = useState<"success" | "error" | " ">(" ");
 
     // Redirigir si no hay role
   useEffect(() => {
@@ -35,13 +40,39 @@ function RecipeTable() {
           creationDate: new Date(recipe.creationDate),
         }));
         setRecipes(data);
+        setMessageType("success")
+      setMessage("recetas cargados")
       } catch (error) {
         console.error("Error al cargar recetas:", error);
+        setMessageType("error")
+      setMessage("no se pudieron cargar las recetas")
       }
     };
 
     fetchRecipes();
-  });
+  },[]);
+
+  const [allProducts, setAllProducts] = useState<Products[]>([]);
+
+  
+  
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await instance.get<Products[]>("/product/allProducts");
+        setAllProducts(res.data);
+      } catch (error) {
+        console.error("Error al cargar productos:", error);
+      }
+    };
+  
+    fetchProducts();
+  }, []);
+
+  const getProductName = (productId: string): string => {
+  const product = allProducts.find((p) => p.id === productId);
+  return product ? product.nameProduct : productId;
+};
 
   const handleSelectRecipe = (recipe: createRecipe) => {
     setSelectedRecipe(recipe);
@@ -61,7 +92,7 @@ function RecipeTable() {
       await instance.put(`api/recipes/update/${updatedRecipe.id}`, {
         id: updatedRecipe.id,
         name: updatedRecipe.name,
-        ingredientes: updatedRecipe.ingredients,
+        ingredients: updatedRecipe.ingredients,
         instructions: updatedRecipe.instructions,
         preparationTime: updatedRecipe.preparationTime,
         servings: updatedRecipe.servings,
@@ -76,9 +107,13 @@ function RecipeTable() {
         )
       );
       console.log("Receta actualizada:", updatedRecipe);
+      setMessageType("success")
+      setMessage("receta actualizada")
       setEditingRecipe(null);
     } catch (error) {
       console.error("Error al actualizar receta:", error);
+      setMessageType("error")
+      setMessage("receta no actualizada")
     }
   };
 
@@ -89,8 +124,12 @@ function RecipeTable() {
         prevRecipes.filter((recipe) => recipe.id !== id)
       );
       console.log("Receta eliminada:", id);
+      setMessageType("success")
+      setMessage("receta desactivada")
     } catch (error) {
       console.error("Error al eliminar receta:", error);
+      setMessageType("error")
+      setMessage("no se pudo eliminar la receta")
     }
   };
 
@@ -157,7 +196,7 @@ function RecipeTable() {
               </tbody>
             </table>
             </div>
-
+            {messageValidation(messageType,message)}
             {selectedRecipe && !editingRecipe && (
               <div className="mt-6 p-4 border bg-gray-100 rounded-lg">
                 <h3 className="text-lg text-black">Detalles de la Receta</h3>
@@ -168,7 +207,7 @@ function RecipeTable() {
                 <ul>
                   {selectedRecipe.ingredients.map((ingredient: Ingredient, index: number) => (
                     <li key={index}>
-                      {ingredient.quantity} {ingredient.unitOfMeasure} de {ingredient.productId}{" "}
+                      {ingredient.quantity} {ingredient.unitOfMeasure} de {getProductName(ingredient.productId)}{" "}
                       {ingredient.additionalNotes && `(${ingredient.additionalNotes})`}
                     </li>
                   ))}
@@ -226,10 +265,8 @@ function RecipeTable() {
                   <label className="block mt-4">Ingredientes:</label>
                   {editingRecipe.ingredients.map((ingredient, index: number) => (
                     <div key={index} className="mt-2">
-                      <input
-                        type="text"
+                      <select
                         value={ingredient.productId}
-                        placeholder="Producto"
                         onChange={(e) => {
                           const updatedIngredients = [...editingRecipe.ingredients];
                           updatedIngredients[index] = {
@@ -239,7 +276,15 @@ function RecipeTable() {
                           setEditingRecipe({ ...editingRecipe, ingredients: updatedIngredients });
                         }}
                         className="border rounded px-4 py-2 mr-2"
-                      />
+                      >
+                        <option value="">Selecciona un producto</option>
+                        {allProducts.map((product) => (
+                          <option key={product.id} value={product.id}>
+                            {product.nameProduct}
+                          </option>
+                        ))}
+                      </select>
+
                       <input
                         type="number"
                         value={ingredient.quantity}
@@ -326,6 +371,7 @@ function RecipeTable() {
                     >
                       Guardar
                     </button>
+                    {messageValidation(messageType,message)}
                   </div>
                 </form>
               </div>

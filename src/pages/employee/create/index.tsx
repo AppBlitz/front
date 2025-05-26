@@ -7,11 +7,12 @@ import { EmployeeCreate,
   RollEmployee
 } from "../../../types/employee";
 import { useLocation, useNavigate } from "react-router";
+import { messageValidation } from "../../../components/button/messageValidation/message";
 
 function CreateEmployee() {
   const { register, handleSubmit, setValue, watch } = useForm<EmployeeCreate>();
   const [stateButton, setStateButton] = useState<boolean>(false);
-  const formValues = watch();
+  //const formValues = watch();
 
   const location = useLocation();
   const navigate = useNavigate(); // Inicializamos useNavigate
@@ -19,6 +20,16 @@ function CreateEmployee() {
   const userRole = queryParams.get("role");
   const token = queryParams.get("token");
   const userId = queryParams.get("id");
+
+    const [message, setMessage] = useState("");
+    const [messageType, setMessageType] = useState<"success" | "error" | "">("");
+
+  const onSubmit = async (data: EmployeeCreate) => {
+  const response = await saveEmployee(data); 
+
+  setMessage(response.message);
+  setMessageType(response.success ? "success" : "error");
+};
 
     // Redirigir si no hay role
   useEffect(() => {
@@ -28,16 +39,19 @@ function CreateEmployee() {
   }, [userRole, navigate]);
 
 
-  const handleDropdownSelect = (field: keyof EmployeeCreate, value: string | boolean) => {
-    setValue(field, value);
-  };
+const handleDropdownSelect = (field: keyof EmployeeCreate, value: string | boolean) => {
+  setValue(field, value, { shouldValidate: true });
+};
 
-  useEffect(() => {
-    const isFormComplete = Object.values(formValues).every(
+useEffect(() => {
+  const subscription = watch((values) => {
+    const isFormComplete = Object.values(values).every(
       (value) => value !== "" && value !== null && value !== undefined
     );
     setStateButton(isFormComplete);
-  }, [formValues]);
+  });
+  return () => subscription.unsubscribe();
+}, [watch]);
 
   return (
     <>
@@ -45,7 +59,7 @@ function CreateEmployee() {
 
       <div className="bg-gray-200 min-h-screen flex items-center justify-center">
         <div className="bg-white p-6 rounded shadow-lg w-full max-w-md relative">
-          <form onSubmit={handleSubmit(saveEmployee)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             {/* Título */}
             <section>
               <h1 className="text-2xl font-bold text-black mb-4">
@@ -91,7 +105,11 @@ function CreateEmployee() {
             {/* Dropdowns */}
             {[
               
-              { label: "Rol", field: "roll.rollEmployee:", options: RollEmployee },
+              { 
+                label: "Rol", 
+                field: "roll", 
+                options: Object.values(RollEmployee) 
+              },
             ].map(({ label, field, options }) => (
               <section key={field} className="mb-4 relative">
                 <DropdownMenu
@@ -114,6 +132,7 @@ function CreateEmployee() {
               </button> }
             </section>
           </form>
+          {messageValidation(messageType,message)}
         </div>
       </div>
     </>

@@ -1,17 +1,16 @@
 import { instance } from "../../../service/api";
 import { EmployeeCreate } from "../../../types/employee";
+import { AxiosError } from "axios";
 
-async function saveEmployee(employee: EmployeeCreate) {
+
+async function saveEmployee(employee: EmployeeCreate): Promise<{ success: boolean; message: string }> {
   try {
-    console.log("Datos del empleado", employee);
-
     const salary: number = Number(employee.baseSalary);
     if (isNaN(salary)) {
-      throw new Error("El salario base no es un número válido.");
+      return { success: false, message: "El salario base no es un número válido." };
     }
-    console.log(employee)
 
-    await instance.post("http://localhost:8080/employees/add", {
+    await instance.post("employees/", {
       nameEmployee: employee.nameEmployee,
       address: employee.address,
       city: employee.city,
@@ -25,9 +24,15 @@ async function saveEmployee(employee: EmployeeCreate) {
       password: employee.password
     });
 
-    console.log("Empleado guardado correctamente.");
-  } catch (error) {
-    console.error("Error al guardar el empleado:", error);
+    return { success: true, message: "Empleado guardado correctamente." };
+  } catch (error: unknown) {
+    let msg = "Error al guardar el empleado.";
+    
+    if (error instanceof AxiosError && error.response) {
+      msg = (error.response.data as { message?: string })?.message || msg;
+    }
+
+    return { success: false, message: msg };
   }
 }
 

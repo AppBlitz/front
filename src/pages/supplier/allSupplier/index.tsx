@@ -30,6 +30,8 @@ function SupplierTable() {
   
   const [allProducts, setAllProducts] = useState<Products[]>([]);
 
+  
+
 useEffect(() => {
   const fetchProducts = async () => {
     try {
@@ -71,7 +73,7 @@ useEffect(() => {
     };
 
     fetchSuppliers();
-  });
+  },[]);
 
   const handleSelectSupplier = (supplier: Supplier) => {
     setSelectedSupplier(supplier);
@@ -107,6 +109,7 @@ useEffect(() => {
         )
       );
       console.log("Proveedor actualizado:", updatedSupplier);
+      // eslint-disable-next-line @typescript-eslint/no-unused-expressions
       window.location.reload
       setMessageType("success")
       setMessage("proveedor actualizado")
@@ -303,8 +306,8 @@ useEffect(() => {
                     >
                       Guardar
                     </button>
-                    {messageValidation(messageType,message)}
                   </div>
+                    {messageValidation(messageType,message)}
                 </form>
               </div>
             )}

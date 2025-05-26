@@ -44,6 +44,8 @@ const ProductHistory = () => {
     setShowModal(true);
 
   };
+  
+    const [showEditModal, setShowEditModal] = useState(false);
 
   useEffect(() => {
     instance.get("product/allProducts")
@@ -129,6 +131,7 @@ const ProductHistory = () => {
                     <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600" onClick={(e) => {
                       e.stopPropagation();
                       handleEditProduct(product);
+                      setShowEditModal(true);
                     }}>Editar</button>
                     <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600" onClick={(e) => {
                       e.stopPropagation();
@@ -324,9 +327,86 @@ const ProductHistory = () => {
           </ul>
         </div>
       )}
+      
     </div>
   </div>
 )}
+{showEditModal && selectedProduct && (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">Editar Producto</h2>
+      <form
+        onSubmit={async (e) => {
+          e.preventDefault();
+          const form = e.target as HTMLFormElement;
+          const price = parseFloat((form.elements.namedItem("price") as HTMLInputElement).value);
+          const weight = parseFloat((form.elements.namedItem("weight") as HTMLInputElement).value);
+
+          try {
+            await instance.put("product/updateAmount", {
+              nameProduct: selectedProduct.nameProduct,
+              priceProduct: price,
+              weightProduct: weight,
+            });
+            // Actualizar localmente
+           setProducts((prev) => {
+              if (!prev) return [];
+              return prev.map((p) =>
+                p.id === selectedProduct?.id
+                  ? { ...p, priceProduct: price, weightProduct: weight }
+                  : p
+              );
+            });
+            setShowEditModal(false);
+          } catch (error) {
+            console.error("Error al editar el producto:", error);
+          }
+        }}
+      >
+        <div className="space-y-4">
+          <div>
+            <label className="block font-medium">Precio:</label>
+            <input
+              type="number"
+              name="price"
+              required
+              step="0.01"
+              defaultValue={selectedProduct.priceProduct}
+              className="w-full border rounded px-3 py-2"
+            />
+          </div>
+          <div>
+            <label className="block font-medium">Peso:</label>
+            <input
+              type="number"
+              name="weight"
+              required
+              step="0.01"
+              defaultValue={selectedProduct.weightProduct}
+              className="w-full border rounded px-3 py-2"
+            />
+          </div>
+          <div className="flex justify-end gap-2">
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Guardar
+            </button>
+            <button
+              type="button"
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              onClick={() => setShowEditModal(false)}
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+)}
+
 
 
     </>

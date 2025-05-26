@@ -27,6 +27,8 @@ function ProductCards() {
   const [selectedProduct, setSelectedProduct] = useState<Products | null>(null);
 
   const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+
   const [productToMove, setProductToMove] = useState<Products | null>(null);
 
 
@@ -109,10 +111,16 @@ function ProductCards() {
                   )}
 
                   <div className="flex justify-between mt-4 gap-2 flex-wrap">
-                    <button className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600" onClick={(e) => {
-                      e.stopPropagation();
-                      handleEditProduct(product);
-                    }}>Editar</button>
+                    <button
+                      className="bg-blue-500 text-white px-4 py-2 rounded-full hover:bg-blue-600"
+                      onClick={(e) => {
+                        e.stopPropagation();
+                        handleEditProduct(product);
+                        setShowEditModal(true);
+                      }}
+                    >
+                      Editar
+                    </button>
                     <button className="bg-red-500 text-white px-4 py-2 rounded-full hover:bg-red-600" onClick={(e) => {
                       e.stopPropagation();
                       handleDeleteProduct(product);
@@ -143,86 +151,82 @@ function ProductCards() {
         </div>
       )
       }
-      {/*
-          <button className="fixed bottom-6 right-6 bg-purple-600 text-white px-6 py-3 rounded-full shadow-lg hover:bg-purple-700 transition"
-          onClick={() => setShowQueryModal(true)} > Consultar movimientos en el inventario </button>  
-
-{showQueryModal && (
+      {showEditModal && selectedProduct && (
   <div className="fixed inset-0 bg-black bg-opacity-50 flex justify-center items-center z-50">
-    <div className="bg-white p-6 rounded-lg shadow-md w-full max-w-md">
-      <h2 className="text-xl font-bold mb-4">Consultar Movimientos</h2>
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-4">Editar Producto</h2>
       <form
         onSubmit={async (e) => {
           e.preventDefault();
           const form = e.target as HTMLFormElement;
-          const date = (form.elements.namedItem("date") as HTMLInputElement).value;
-          const startHour = (form.elements.namedItem("startHour") as HTMLInputElement).value;
-          const endHour = (form.elements.namedItem("endHour") as HTMLInputElement).value;
+          const price = parseFloat((form.elements.namedItem("price") as HTMLInputElement).value);
+          const weight = parseFloat((form.elements.namedItem("weight") as HTMLInputElement).value);
 
           try {
-            let res;
-            if (startHour && endHour) {
-              res = await axios.get(`http://localhost:8080/product/movementByRangeHour`, {
-                params: {
-                  date,
-                  startHour: parseInt(startHour),
-                  endHour: parseInt(endHour),
-                },
-              });
-            } else {
-              res = await axios.get(`http://localhost:8080/product/movementByDate`, {
-                params: { date },
-              });
-            }
-            setQueryResults(res.data);
+            await instance.put("product/updateAmount", {
+              nameProduct: selectedProduct.nameProduct,
+              priceProduct: price,
+              weightProduct: weight,
+            });
+            // Actualizar localmente
+            setProducts((prev) =>
+              prev.map((p) =>
+                p.id === selectedProduct.id
+                  ? { ...p, priceProduct: price, weightProduct: weight }
+                  : p
+              )
+            );
+            setShowEditModal(false);
           } catch (error) {
-            console.error("Error al consultar movimientos:", error);
+            console.error("Error al editar el producto:", error);
           }
         }}
       >
         <div className="space-y-4">
           <div>
-            <label className="block font-medium">Fecha:</label>
-            <input type="date" name="date" required className="w-full border rounded px-3 py-2" />
+            <label className="block font-medium">Precio:</label>
+            <input
+              type="number"
+              name="price"
+              required
+              step="0.01"
+              defaultValue={selectedProduct.priceProduct}
+              className="w-full border rounded px-3 py-2"
+            />
           </div>
           <div>
-            <label className="block font-medium">Hora inicio (opcional):</label>
-            <input type="number" name="startHour" className="w-full border rounded px-3 py-2" min={0} max={23} />
-          </div>
-          <div>
-            <label className="block font-medium">Hora fin (opcional):</label>
-            <input type="number" name="endHour" className="w-full border rounded px-3 py-2" min={0} max={23} />
+            <label className="block font-medium">Peso:</label>
+            <input
+              type="number"
+              name="weight"
+              required
+              step="0.01"
+              defaultValue={selectedProduct.weightProduct}
+              className="w-full border rounded px-3 py-2"
+            />
           </div>
           <div className="flex justify-end gap-2">
-            <button type="submit" className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
-              Consultar
+            <button
+              type="submit"
+              className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600"
+            >
+              Guardar
             </button>
-            <button onClick={() => { setShowQueryModal(false); setQueryResults(null); }} className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600">
-              Cerrar
+            <button
+              type="button"
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+              onClick={() => setShowEditModal(false)}
+            >
+              Cancelar
             </button>
           </div>
         </div>
       </form>
-
-      {queryResults && (
-        <div className="mt-6 max-h-60 overflow-y-auto">
-          <h3 className="font-semibold mb-2">Resultados:</h3>
-          <ul className="list-disc list-inside text-sm">
-            {queryResults.length > 0 ? (
-              queryResults.map((m, i) => (
-                <li key={i}>
-                  <span className="font-medium"> {m.action}</span> - [{m.nameProduct}] cantidad : {m.amount} - ({m.reason})
-                </li>
-              ))
-            ) : (
-              <li>No se encontraron movimientos.</li>
-            )}
-          </ul>
-        </div>
-      )}
     </div>
   </div>
-)} */}
+)}
+
+  
 
     </>
   );

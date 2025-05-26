@@ -9,21 +9,22 @@ type EmployeeCreate = {
   baseSalary: number
   email: string
   password: string
-  roll: roll
+  roll: RollEmployee
   schedule: Partial<Record<DayOfWeek, Hora>>
 }
-type roll = {
-  rollEmployee: RollEmployee
-}
+
 type user = {
   email: string,
   password: string
 }
 
 enum RollEmployee {
-  KITCHENEMPLOYEE = "KITCHENEMPLOYEE",
-  CASHIEREMPLOYE = "CASHIEREMPLOYE",
-  WAREHOUSEEMPLOYEE = "WAREHOUSEEMPLOYEE"
+    KITCHENEMPLOYEE = "KitchenEmployee",
+    CASHIEREMPLOYEE = "CashierEmployee",
+    WAREHOUSEEMPLOYEE = "WarehouseEmployee",
+    WAITEREMPLOYEE = "waiterEmployee",
+    DEFAULT = "DEFAULT",
+    ADMIN = "ADMIN"
 }
 enum DayOfWeek {
   MONDAY = "MONDAY",
@@ -52,7 +53,7 @@ type Employee = {
   baseSalary: number
   email: string
   password: string
-  roll: roll
+  roll: RollEmployee
   schedule: Partial<Record<DayOfWeek, Hora>>
 }
 export type { EmployeeCreate, user,Employee }
